@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>CleanArchitecture.Application</RootNamespace>
+        <AssemblyName>CleanArchitecture.Application</AssemblyName>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+         <!--<PackageReference Include="AutoMapper" Version="10.1.1" />-->
+           <!--<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />-->
+          <!--<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />-->
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-rc.2.22472.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.6" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="QuestPDF" Version="2024.12.0-rc0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Domain\Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Repository\" />
+    
+      <None Remove="AutoMapper" />
+      <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+      <None Remove="HrManagment\" />
+      <None Remove="HrManagment\PersonItems\" />
+      <None Remove="HrManagment\People\Commands\" />
+      <None Remove="HrManagment\People\Queries\" />
+      <None Remove="HrManagment\People\EventHandlers\" />
+      <None Remove="HrManagment\People\Commands\CreateTodoItem\" />
+      <None Remove="HrManagment\People\Commands\DeleteTodoItem\" />
+      <None Remove="HrManagment\People\Commands\UpdateTodoItem\" />
+      <None Remove="Address\" />
+      <None Remove="Address\Address\" />
+      <None Remove="Address\Polygon\" />
+      <None Remove="Common\GlobalDtos\" />
+      <None Remove="Order\" />
+      <None Remove="Financial\Financial\Accountant\" />
+      <None Remove="Order\Order\Commands\CreateItem\OrderDinnerCommandcs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Repository\" />
+      <Folder Include="Address\" />
+      <Folder Include="Address\Address\" />
+      <Folder Include="Address\Polygon\" />
+      <Folder Include="Financial\Financial\Accountant\" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,106 @@
+﻿@using CleanArchitecture.Application.PagesDto
+<!-- Pages/Shared/_SampleFormAndListPartial.cshtml -->
+@model CleanArchitecture.Application.Orders.Commands.Create.OrderAnalyzeCommand
+<div class="card">
+    <input type="hidden" name="key" value="BET"/>
+    <div class="card-header">آنالیز BET</div>
+    <div class="card-body">
+        <div class="row mt-2">
+            <div class="form-group col-auto">
+                <label for="name">نام نمونه</label>
+                <input type="text"
+                       class="form-control"
+                       asp-for="@Model.Name"
+                       required
+                       id="name" name="Name">
+                <span class="text-danger mt-2" id="NameError"
+                      asp-validation-for="@Model.Name">
+                </span>
+            </div>
+            <div class="form-group col-auto">
+                <label for="DegassingTemperature">دمای گاززدایی</label>
+                <input type="number" step="0.1"
+                       class="form-control"
+                       placeholder="m&sup2;/g"
+                       required
+                       asp-for="@Model.Bet.DegassingTemperature"
+                       id="DegassingTemperature" name="DegassingTemperature">
+                <span class="text-danger mt-2" id="DegassingTemperatureError"
+                      asp-validation-for="@Model.Bet.DegassingTemperature">
+                </span>
+            </div>
+            <div class="form-group col-auto">
+                <label for="Time">مدت زمان</label>
+                <input type="number" step="0.1"
+                       class="form-control"
+                       placeholder="ساعت"
+                       required
+                       asp-for="@Model.Bet.Time"
+                       id="Time" name="Time">
+                <span class="text-danger mt-2" id="TimeError"
+                      asp-validation-for="@Model.Bet.Time">
+                </span>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        <button type="button" class="btn btn-link p-0"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal1"
+                                title="  قوانین">
+                            قوانین
+                        </button>
+                        مربوط به ثبت BET را پذیرفته ام
+                    </label>
+                </div>
+            </div>
+            <div class="modal fade" data-aos="none" id="exampleModal1" aria-labelledby="exampleModal1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">قوانین مربوط به آنالیز BET</h5>
+                            </div>
+                            <div class="modal-body">
+                                <ul>
+                                    <li>در صورت عدم اعلام دما و زمان گاززدایی، آزمایشگاه به‌صورت پیش‌فرض فرایند گاززدایی را در دمای 120 درجه سانتی‌گراد و به مدت 2 ساعت انجام می‌دهد.</li>
+                                    <li>نتایج اصلی آنالیز شامل نمودارهای Ads/Des، BET، Langmuir، t-plot و BJH می‌باشد، و آزمایشگاه مسئولیتی در قبال نمودارهای اضافی ارسال‌شده ندارد. دریافت نمودارهای اضافی با پرداخت هزینه جداگانه و ذکر در توضیحات ممکن است.</li>
+                                    <li>مقدار استاندارد نمونه برای آزمون BET، 0.1 گرم است. در صورت کمتر بودن نمونه ارسالی، آزمایشگاه مسئولیتی در قبال کیفیت نتایج ندارد و تکرار آنالیز مشمول پرداخت هزینه مجدد می‌باشد.</li>
+                                    <li>در صورت تخریب نمونه در دمای پیش‌فرض 120 درجه سانتی‌گراد یا دمای اعلام‌شده، آزمایشگاه مسئولیتی ندارد و در صورت تخریب سل شیشه‌ای آنالیز، هزینه آن به عهده متقاضی می‌باشد.</li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">تایید</button>
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            </div >
+
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+         $("form").submit(function (event) {
+                validateField("Time", "TimeError", "مدت زمان");
+                validateField("Name", "NameError", "نام نمونه");
+                validateField("DegassingTemperature", "DegassingTemperatureError", "دمای گاززدایی");
+         });
+         function validateField(fieldId, errorMessageId, fieldName) {
+             var fieldValue = $("#" + fieldId).val();
+             if ($("#" + fieldId).prop("required") && !fieldValue) {
+                 console.log(fieldName + " is required");
+                 var errorMessage = "وارد کردن " + fieldName + " الزامی است";
+                 $("#" + errorMessageId).text(errorMessage);
+             } else {
+                 $("#" + errorMessageId).text("");
+             }
+         }
+
+        
+
+    });
+</script>

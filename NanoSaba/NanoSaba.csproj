@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>False</UseWindowsForms>
+    <UseWPF>False</UseWPF>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\net7.0</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET;NET7_0;NETCOREAPP</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="Views\Signin.cshtml" />
+    <Content Remove="wwwroot\img\MainImage\" />
+    <Content Remove="wwwroot\uploads\cat-abmive.png" />
+    <Content Remove="wwwroot\uploads\FTIR.png" />
+    <Content Remove="wwwroot\uploads\Archive.jpeg" />
+    <Content Remove="wwwroot\uploads\data.txt" />
+    <Content Remove="wwwroot\uploads\Screenshot 2024-11-25 140006.png" />
+    <Content Remove="wwwroot\uploads\IMG_9454.jpeg" />
+    <Content Remove="wwwroot\uploads\IMG_8333.jpeg" />
+    <Content Remove="wwwroot\uploads\34.jpeg" />
+    <Content Remove="wwwroot\uploads\34 (2).jpeg" />
+    <Content Remove="wwwroot\uploads\1403220996913531_1.pdf" />
+    <Content Remove="wwwroot\Complaint.docx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Views\Signin.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0-rc.2.22476.2" />
+          <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.6" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.1.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.0-rc.2.22476.2" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.0-rc.2.22476.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0-rc.2.22476.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.10" />
+		<PackageReference Include="EPPlus" Version="7.0.0" />
+        <PackageReference Include="Duende.IdentityServer.Storage" Version="6.2.0" />
+        <PackageReference Include="FluentValidation" Version="10.3.4" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Duende.IdentityServer.Storage" />
+      <None Remove="FluentValidation" />
+      <None Remove="Views\Article\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Views\Article\" />
+      <Folder Include="wwwroot\img\MainImage\" />
+      <Folder Include="wwwroot\uploads\" />
+    </ItemGroup>
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\uploads\IMG_8333.jpeg\IMG_8333.jpeg" />
+    </ItemGroup>
+</Project>

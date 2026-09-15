@@ -1,0 +1,742 @@
+﻿@using System.Runtime.InteropServices.Marshalling
+@using CleanArchitecture.Application.Common.Interfaces;
+@using CleanArchitecture.Infrastructure.Identity
+@using CleanArchitecture.Application.PagesDto
+@using CleanArchitecture.Domain.Entities.Orders
+@using CleanArchitecture.Domain.ValueObjects
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model OrderPageDto
+
+
+@inject IIdentityService IdentityService
+@inject ICurrentUserService CurrentUser
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>شرکت آنالیزی نانو مواد صبا</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../favicon.png" rel="icon">
+    <link href=" ../apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    @* <link href="../vendor/aos/aos.css" rel="stylesheet"> *@
+    <link href="../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="../css/main.css" rel="stylesheet">
+    <style>
+        /* Custom style for button with no background */
+        .btn-no-background {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .btn-no-background:hover {
+            color: #007bff; /* Optional: color change on hover */
+        }
+
+        pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: blue;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .pagination a.active {
+            font-weight: bold;
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+
+        #emoji-rating .emoji-option {
+            cursor: pointer;
+            margin: 0 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 5px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        #emoji-rating .emoji-option:hover {
+            transform: scale(1.2);
+        }
+
+        #emoji-rating .selected {
+            background-color: #e6f5ea; /* light green background */
+            box-shadow: 0 0 8px #28a745;
+        }
+    </style>
+</head>
+<body>
+<div class="breadcrumbs">
+    <nav>
+        <ol>
+            <li>
+                <a href="../Home/#hero">صفحه ی اصلی</a>
+            </li>
+            <li>سفارشات</li>
+        </ol>
+    </nav>
+</div>
+
+
+<section id="contact" class="contact">
+    <div class="container mt-1 pt-3">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title">مدیریت سفارشات</h5>
+            </div>
+            <div class="card-body">
+                <!-- Table Inside Card -->
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center">
+                        <caption class="mx-2">سفارشات</caption>
+                        <thead>
+                        <tr>
+                            <th scope="col">تاریخ ثبت</th>
+                            <th scope="col">نام مشتری</th>
+                            <th scope="col">شماره سفارش</th>
+                            <th scope="col">مبلغ سفارش</th>
+                            <th scope="col">تعداد آنالیز</th>
+                            <th scope="col">زمان دریافت نتایج</th>
+                            <th scope="col">وضعیت سفارش</th>
+                            <th scope="col">نظر کارشناس</th>
+                            <th scope="col">نوع آنالیز</th>
+                            <th scope="col">عملیات</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var order in Model.Orders.Items)
+                        {
+                            <tr>
+                                <td>@order.Created</td>
+                                <td>@order.CreatedBy</td>
+                                <td>@order.TrackingCode</td>
+                                <td>@order.TotalPrice</td>
+                                <td>@order.Analyzes.Count()</td>
+                                <td>@order.ProcessingTime</td>
+                                <td>@order.OrderStatus.Title</td>
+                                <td class="text-wrap">@order.LastHistory?.TechnicalComment</td>
+                                <td>@order.AnalyzerDevice?.Name</td>
+                                <td>
+                                    <button type="button"
+                                            onclick="window.location.href='@Url.ActionLink("OrderView", "RegisterOrder", new { item = @order.Id.ToString() })'"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            class="btn btn-outline-secondary btn-sm mx-1 mt-1"
+                                            title="مشاهده جزيیات">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    @if (order.OrderStatus.Id == OrderStatus.Initial.Id
+                                         || order.OrderStatus.Id == OrderStatus.SendToTechnicalExpert.Id)
+                                    {
+                                        <button class="btn btn-outline-dark btn-sm mx-1 mt-1"
+                                                title="ویرایش سفارش"
+                                                onclick="window.location.href='@Url.ActionLink("GetOrder", "RegisterOrder", new { item = @order.Id.ToString(), isEdit = true })'">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                    }
+
+                                    @if (CurrentUser.IsInRole("Admin"))
+                                    {
+                                        @if (order.OrderStatus.Id == OrderStatus.SendToTechnicalExpert.Id)
+                                        {
+                                            <button type="button"
+                                                    onclick="setOrderId('@order.Id')"
+                                                    class="btn btn-outline-success btn-sm mx-1 mt-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-placement="top"
+                                                    data-bs-target="#TechnicalExpertConfirmModal"
+                                                    title="تایید کارشناسی">
+                                                <i class="bi bi-check-square-fill"></i>
+                                            </button>
+                                        }
+
+                                        @if (order.OrderStatus.Id == OrderStatus.TechnicalConfirm.Id)
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-outline-warning btn-sm mx-1 mt-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal"
+                                                    onclick="setOrderId('@order.Id')"
+                                                    title="صدور فاکتور">
+                                                <i class="bi bi-calculator"></i>
+                                            </button>
+                                        }
+
+                                        @if (order.OrderStatus.Id == OrderStatus.SendToFinancial.Id)
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-outline-warning btn-sm mx-1 mt-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal"
+                                                    onclick="setOrderId('@order.Id')"
+                                                    title="ویرایش فاکتور">
+                                                <i class="bi bi-calculator"></i>
+                                            </button>
+                                        }
+
+                                        @if (order.OrderStatus.Id == OrderStatus.FinancialConfirmed.Id)
+                                        {
+                                            <button type="button"
+                                                    onclick="setOrderId('@order.Id')"
+                                                    class="btn btn-outline-info btn-sm mx-1 mt-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-placement="top"
+                                                    data-bs-target="#GetAnalyze"
+                                                    title="تایید دریافت نمونه">
+                                                <i class="bi bi-check-square-fill"></i>
+                                            </button>
+                                        }
+
+                                        @if (order.OrderStatus.Id == OrderStatus.WaitingForFinancial.Id)
+                                        {
+                                            <button type="button"
+                                                    onclick="setOrderId('@order.Id')"
+                                                    class="btn btn-outline-info btn-sm mx-1 mt-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-placement="top"
+                                                    data-bs-target="#ConfirmFinancial"
+                                                    title="تایید مالی">
+                                                <i class="bi bi-check-square-fill"></i>
+                                            </button>
+                                        }
+
+                                        @if (order.OrderStatus.Id == OrderStatus.Proccessing.Id)
+                                        {
+                                            <button type="button"
+                                                    onclick="setOrderId('@order.Id')"
+                                                    class="btn btn-outline-danger btn-sm mx-1 mt-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-placement="top"
+                                                    data-bs-target="#uploadResult"
+                                                    title="بارگزاری نتایج">
+                                                <i class="bi bi-upload"></i>
+                                            </button>
+                                        }
+                                    }
+
+                                    @if (CurrentUser.IsInRole("Customer"))
+                                    {
+                                        @if (order.OrderStatus.Id == OrderStatus.SendToFinancial.Id)
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-outline-secondary btn-sm mx-1 mt-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal1"
+                                                    onclick="setOrderId('@order.Id')"
+                                                    title="بارگزاری فیش">
+                                                <i class="bi bi-cloud-upload-fill"></i>
+                                            </button>
+                                        }
+
+                                        @if (order.FinancialStatusId == FinancialStatus.Payed.Id)
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-outline-primary btn-sm mx-1 mt-1"
+                                                    onclick="window.open('@Url.Action("GeneratePdf", "FormCreator", new { orderId = order.Id })', '_blank')"
+                                                    title="دریافت فاکتور">
+                                                <i class="bi bi-clipboard-check-fill"></i>
+                                            </button>
+                                        }
+                                    }
+
+                                    @if (order.OrderStatus.Id == OrderStatus.Completed.Id)
+                                    {
+                                        <button type="button"
+                                                onclick="setOrderId('@order.Id')"
+                                                class="btn btn-outline-success btn-sm mx-1 mt-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-placement="top"
+                                                data-bs-target="#GetResult"
+                                                title="دریافت نتایج">
+                                            <i class="bi bi-check-square-fill"></i>
+                                        </button>
+
+                                        <button type="button"
+                                                onclick="setOrderId('@order.Id')"
+                                                class="btn btn-outline-success btn-sm mx-1 mt-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-placement="top"
+                                                data-bs-target="#GetSurvey"
+                                                title="نظرسنجی">
+                                            <i class="bi bi-chat-left-text"></i>
+                                        </button>
+                                    }
+
+
+                                </td>
+                                <div class="modal fade" data-aos="none" id="GetResult" aria-labelledby="GetResult"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">دریافت نتایج</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    @* <a href="/uploads/@order.ResultImageFileName" download="@order.ResultImageFileName">نتایج</a> *@
+                                                    <a href="@Url.Content("~/uploads/" + order.ResultImageFileName)"
+                                                       download="@order.ResultImageFileName">نتایج</a>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                                                    تایید
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="GetSurvey" tabindex="-1" aria-labelledby="GetSurveyLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="GetSurveyLabel">نظر سنجی</h5>
+                                            </div>
+                                            @using (Html.BeginForm("ConfirmSurvey",
+                                                            "Order", FormMethod.Post))
+                                            {
+                                                <div class="modal-body">
+                                                    <input type="hidden" id="surveyOrderId" name="id">
+                                                    <div class="mb-3 text-center">
+                                                        <label class="form-label d-block mb-2">امتیاز شما:</label>
+                                                        <div id="emoji-rating" class="fs-1">
+                                                            <span class="emoji-option" data-value="1"
+                                                                  title="خیلی بد">😡</span>
+                                                            <span class="emoji-option" data-value="2"
+                                                                  title="بد">😕</span>
+                                                            <span class="emoji-option" data-value="3"
+                                                                  title="معمولی">😐</span>
+                                                            <span class="emoji-option" data-value="4"
+                                                                  title="خوب">🙂</span>
+                                                            <span class="emoji-option" data-value="5"
+                                                                  title="عالی">😍</span>
+                                                        </div>
+                                                        <input type="hidden" id="score" name="score" required/>
+                                                    </div>
+
+                                                    <!-- Comment text -->
+                                                    <div class="mb-3">
+                                                        <label for="comment" class="form-label">نظر شما:</label>
+                                                        <textarea class="form-control" id="comment" name="comment"
+                                                                  rows="3"
+                                                                  placeholder="نظر خود را وارد کنید..."></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">
+                                                        بستن
+                                                    </button>
+                                                    <button  type="submit" class="btn btn-success">
+                                                        ارسال
+                                                    </button>
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" data-aos="none" id="exampleModal"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content my-2 mx-2">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">صدور فاکتور</h1>
+                                            </div>
+                                            @using (Html.BeginForm("ConfirmFinancial",
+                                                            "Order", FormMethod.Post))
+                                            {
+                                                <div class="modal-body">
+                                                    <div class="form-group form-check col-auto">
+                                                        <label for="analyzePrice">قیمت آنالیز</label>
+                                                        <input type="number" step="1" class="form-control"
+                                                               asp-for="@order.Financial.AnalyzePrice"
+                                                               id="analyzePrice" name="AnalyzePrice"
+                                                               onchange="calculateTotal()" oninput="calculateTotal()">
+                                                    </div>
+                                                    <div class="form-group form-check col-auto">
+                                                        <label for="tax">مالیات</label>
+                                                        <input type="number" asp-for="@order.Financial.Tax" value="10"
+                                                               disabled step="1" class="form-control"
+                                                               onchange="calculateTotal()"
+                                                               asp-for="@order.Financial.Tax"
+                                                               oninput="calculateTotal()">
+                                                        <input hidden type="number" value="10" step="1"
+                                                               class="form-control"
+                                                               id="tax" name="Tax">
+                                                    </div>
+                                                    <div class="form-group form-check col-auto">
+                                                        <label for="grantPrice">قیمت گرانت</label>
+                                                        <input type="number" step="1" class="form-control"
+                                                               id="grantPrice" name="GrantPrice"
+                                                               asp-for="@order.Financial.GrantPrice"
+                                                               onchange="calculateTotal()" oninput="calculateTotal()">
+                                                    </div>
+                                                    <div class="form-group form-check col-auto">
+                                                        <label for="grantPrice">هزینه های مازاد</label>
+                                                        <input type="number" step="1" class="form-control"
+                                                               asp-for="@order.Financial.AdditionalPrice"
+                                                               id="additionalPrice" name="AdditionalPrice"
+                                                               onchange="calculateTotal()" oninput="calculateTotal()">
+                                                    </div>
+                                                    <div class="form-group form-check col-auto">
+                                                        <label for="totalPayablePrice">مبلغ قابل پرداخت</label>
+                                                        <input type="number" step="1" class="form-control"
+                                                               asp-for="@order.Financial.TotalPayablePrice"
+                                                               id="totalPayablePrice" name="TotalPayablePrice" readonly>
+                                                        <span class="text-danger mt-2" id="totalPayablePriceError"
+                                                              style="display:none;">
+                                مبلغ پرداختی باید بزرگ‌تر از 0 باشد
+                            </span>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">انصراف
+                                                    </button>
+                                                    <input type="hidden" id="invoiceId" name="id"/>
+                                                    <button type="submit" class="btn btn-primary" id="submitButton"
+                                                            disabled>ثبت فاکتور
+                                                    </button>
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="exampleModal1" tabindex="-1"
+                                     aria-labelledby="exampleModal1Label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content my-3">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModal1Label">بارگذاری فیش پرداخت</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="انصراف"></button>
+                                            </div>
+                                            <form asp-controller="Order" asp-action="UploadFile" method="post"
+                                                  enctype="multipart/form-data">
+                                                <div class="modal-body">
+                                                    <div class="form-group mb-3">
+                                                        <label for="fileInput" class="form-label">فیش مورد نظر را
+                                                            بارگذاری کنید:</label>
+                                                        <input type="file" id="fileInput" class="form-control"
+                                                               name="UploadedFile" required aria-required="true">
+                                                    </div>
+                                                    <input type="hidden" id="orderId" name="id">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">انصراف
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary">بارگذاری</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" data-aos="none" id="uploadResult" tabindex="-1"
+                                     aria-labelledby="uploadResultLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content my-3">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="uploadResultLabel">بارگذاری نتایج</h5>
+                                            </div>
+                                            <form asp-controller="Order" asp-action="UploadResultFile" method="post"
+                                                  enctype="multipart/form-data">
+                                                <div class="modal-body">
+                                                    <div class="form-group mb-3">
+                                                        <label for="resultFileInput" class="form-label">نتایج را
+                                                            بارگذاری کنید:</label>
+                                                        <input type="file" id="resultFileInput" class="form-control"
+                                                               name="uploadedFile" required aria-required="true">
+                                                    </div>
+                                                    <input type="hidden" id="uploadOrderId" name="id">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">انصراف
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary">بارگذاری</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" data-aos="none" id="TechnicalExpertConfirmModal"
+                                     aria-labelledby="YesNoModal" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">تایید کارشناسی</h5>
+                                            </div>
+                                            @using (Html.BeginForm("ConfirmTechnicalExpertCommand",
+                                                            "Order", FormMethod.Post))
+                                            {
+                                                <input type="hidden" id="technicalOrderId" name="id"/>
+                                                <div class="modal-body">
+                                                    <p>سفارش مورد نظر مورد نظر تایید کارشناس می باشد.</p>
+                                                    <div class="form-group">
+                                                        <label for="description">توضیحات</label>
+                                                        <input type="text" class="form-control"
+                                                               id="description" name="description">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">انصراف
+                                                    </button>
+                                                    <button type="submit" name="button" value="reject"
+                                                            class="btn btn-danger">عدم تایید
+                                                    </button>
+                                                    <button type="submit" name="button" value="confirm"
+                                                            class="btn btn-success">تایید
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" data-aos="none" id="GetAnalyze" aria-labelledby="YesNoModal"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">تایید دریافت نمونه</h5>
+                                            </div>
+                                            @using (Html.BeginForm("ConfirmGettingAnalyze",
+                                                            "Order", FormMethod.Post))
+                                            {
+                                                <input type="hidden" id="getAnalyzeId" name="id"/>
+                                                <div class="modal-body">
+                                                    <p>سفارش مورد نظر مورد نظر تایید کارشناس می باشد.</p>
+                                                    <div class="form-group">
+                                                        <label for="description">توضیحات</label>
+                                                        <input type="text" class="form-control"
+                                                               id="description" name="description">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">انصراف
+                                                    </button>
+                                                    <button type="submit" name="button" value="reject"
+                                                            class="btn btn-danger">عدم تایید
+                                                    </button>
+                                                    <button type="submit" name="button" value="confirm"
+                                                            class="btn btn-success">تایید
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" data-aos="none" id="ConfirmFinancial"
+                                     aria-labelledby="ConfirmFinancial" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">تایید مالی</h5>
+                                            </div>
+                                            @using (Html.BeginForm("ConfirmFinancialCommand",
+                                                            "Order", FormMethod.Post))
+                                            {
+                                                <input type="hidden" id="financialOrderId" name="id"/>
+                                                <div class="modal-body">
+                                                    <p>سفارش زیر پرداخت را انجام داده است.</p>
+                                                    <div class="form-group">
+                                                        @* <a href="/uploads/@order.PaymentImageFileName" download="@order.PaymentImageFileName">فیش پرداختی</a> *@
+                                                        <a href="https://www.yourdomain.com/uploads/@order.PaymentImageFileName"
+                                                           download="@order.PaymentImageFileName">فیش پرداختی</a>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="description">توضیحات</label>
+                                                        <input type="text" class="form-control"
+                                                               id="description" name="description">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="ProcessingTime">زمان دریافت نتایج</label>
+                                                        <input type="number" class="form-control"
+                                                               id="ProcessingTime" name="ProcessingTime"
+                                                               placeholder="روز">
+
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">انصراف
+                                                    </button>
+                                                    <button type="submit" name="button" value="confirm"
+                                                            class="btn btn-success">تایید
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </tr>
+                        }
+                    </table>
+
+                    <ul class="pagination">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                @if (Model.Orders.HasPreviousPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Index"
+                                           asp-route-pageNumber="@(Model.Orders.PageNumber - 1)">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">قبل</span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                }
+                                @for (int i = 1; i <= Model.Orders.TotalPages; i++)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+                                    </li>
+                                }
+                                @if (Model.Orders.HasNextPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Index"
+                                           asp-route-pageNumber="@(Model.Orders.PageNumber + 1)">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">بعد</span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+
+<script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const emojis = document.querySelectorAll('#emoji-rating .emoji-option');
+        const scoreInput = document.getElementById('score');
+
+        emojis.forEach(emoji => {
+            emoji.addEventListener('click', () => {
+                const value = emoji.getAttribute('data-value');
+                scoreInput.value = value;
+
+                emojis.forEach(e => e.classList.remove('selected'));
+                emoji.classList.add('selected');
+            });
+        });
+    });
+
+    function isNumber(evt) {
+        evt = evt || window.event;
+        var charCode = evt.which || evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+
+    function calculateTotal() {
+        // Get the values of the input fields
+        const analyzePrice = parseFloat(document.getElementById('analyzePrice').value) || 0;
+        const tax = parseFloat(document.getElementById('tax').value) || 0;
+        const grantPrice = parseFloat(document.getElementById('grantPrice').value) || 0;
+        const additionalPrice = parseFloat(document.getElementById('additionalPrice').value) || 0;
+        const errorSpan = document.getElementById('totalPayablePriceError');
+        const taxValue = (tax / 100) * analyzePrice;
+        const totalPayablePrice = (analyzePrice + taxValue + additionalPrice) - grantPrice;
+        const submitButton = document.getElementById('submitButton');
+        let isValid = true;
+        if (isNaN(totalPayablePrice) || totalPayablePrice < 0) {
+            errorSpan.style.display = 'inline';
+            isValid = false;
+        } else {
+            errorSpan.style.display = 'none';
+        }
+        submitButton.disabled = !isValid;
+        document.getElementById('totalPayablePrice').value = totalPayablePrice.toFixed(2);
+    }
+
+    function setOrderId(orderId) {
+        // Get the orders object passed from the model
+        var ordersItem = @Html.Raw(Json.Serialize(@Model.Orders));
+        var orders = ordersItem.items;
+        console.log("All Orders:", orders);
+
+        // Set the order ID in the hidden input fields
+        document.getElementById('orderId').value = orderId;
+        document.getElementById('invoiceId').value = orderId;
+        document.getElementById('technicalOrderId').value = orderId;
+        document.getElementById('getAnalyzeId').value = orderId;
+        document.getElementById('financialOrderId').value = orderId;
+        document.getElementById('uploadOrderId').value = orderId;
+        document.getElementById('surveyOrderId').value = orderId;
+
+        // Find the specific order from the orders array
+        var order = orders.find(order => order.id === parseInt(orderId, 10));
+        console.log("Selected Order:", order);
+
+        if (order) {
+            // Update links with the correct order data
+            const paymentImageLink = document.querySelector('#ConfirmFinancial .form-group a');
+            paymentImageLink.href = `/uploads/${order.paymentImageFileName}`;
+            paymentImageLink.textContent = 'فیش پرداختی';
+            paymentImageLink.download = order.paymentImageFileName;
+
+            const GetResultLink = document.querySelector('#GetResult .form-group a');
+            GetResultLink.href = `/uploads/${order.resultImageFileName}`;
+            GetResultLink.textContent = 'نتایج';
+            GetResultLink.download = order.resultImageFileName;
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,275 @@
+﻿@using CleanArchitecture.Infrastructure.Identity
+@using CleanArchitecture.Infrastructure.Services
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IUserCodeService UserCodeService
+@model MobileNumberRegister
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>آزمایشگاه نانو مواد صبا</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../favicon.png" rel="icon">
+    <link href=" ../apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Vendor CSS Files -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    @* <link href="../vendor/aos/aos.css" rel="stylesheet"> *@
+    <link href="../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="../css/main.css" rel="stylesheet">
+    <link href="../css/PinCode.css" rel="stylesheet">
+    <script type="text/javascript" src="../js/pincode.js"></script>
+    <script src="/bootstrap/5/js/bootstrap.bundle.min.js"></script>
+    <!-- =======================================================
+    * Template Name: Impact
+    * Updated: Mar 10 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+<section id="contact" class="contact">
+    <div class="container d-flex flex-column align-items-center justify-content-center" data-aos="fade-up">
+
+        <div class="row gx-lg-0 gy-2 col-md-6">
+
+            <div>
+
+                <div class="info-container d-flex flex-column align-items-center justify-content-center">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">ورود با شماره موبایل</a>
+                            <a class="nav-link" id="nav-userpass-tab" data-bs-toggle="tab" href="#nav-userpass" role="tab" aria-controls="nav-userpass" aria-selected="false">ورود با نام کاربری</a>
+                            <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">ثبت نام</a>
+
+                        </div>
+                    </nav>
+                    <div class="tab-content info-item" id="nav-tabContent">
+
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                            <form class="needs-validation" id="mobileNumberForm" action="/Home/mobileNumber" method="post">
+
+                                @if (@Model?.IsRegistered is null || @Model?.IsRegistered is false)
+                                {
+                                    <h6>سلام!</h6>
+                                    <h6>لطفا شماره موبایل خود را وارد کنید</h6>
+                                    <div class="input-group has-validation">
+                                        <input type="number" class="form-control"
+                                               maxlength="11"
+                                               minlength="11"
+                                               required
+                                               name="MobileNumber" id="MobileNumber"
+                                               aria-describedby="inputGroupPrepend">
+                                    </div>
+                                    <span class="text-danger mt-2" id="MobileNumberError">
+                                    </span>
+                                    <button type="submit" class="btn btn-primary col-md-12 mt-4">
+                                        ورود
+                                    </button>
+                                }
+                            </form>
+
+                            @using (Html.BeginForm("SignInWithCode", "Home", FormMethod.Post))
+                            {
+                                @*<form action="/Home/LoginWithCode" method="post" class="row g-3 needs-validation" novalidate>*@
+
+                                @if (Model?.IsRegistered == true)
+                                {
+                                    <h6>کد تایید را وارد کنید</h6>
+                                    <h6>کد تایید برای شماره @Model?.MobileNumber پیامک شد</h6>
+                                    <div>
+                                        <input class="form-control col-md-6" onkeypress="return addEventListener(event)" name="Number1" type="number" maxlength="1" autofocus>
+                                    </div>
+                                    <div class=" d-flex flex-column align-items-center justify-content-center">
+                                        <button type="submit" class="btn btn-primary d-flex justify-center justify-content-center col-md-6 mt-4">
+                                            تایید
+                                        </button>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <form action="/Home/Register" id="registerForm" method="post" class="row g-3 needs-validation" novalidate>
+                                <div class="col-md-4">
+                                    <label for="FirstName" class="form-label">نام</label>
+                                    <input type="text" class="form-control" name="FirstName" id="FirstName" required>
+                                    <span class="text-danger mt-2" id="FirstNameError">
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="LastName" class="form-label">نام خانوادگی</label>
+                                    <input type="text" class="form-control" name="LastName" id="LastName" required>
+                                    <span class="text-danger mt-2" id="LastNameError">
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="CompanyName" class="form-label">نام شرکت/دانشگاه/سازمان</label>
+                                    <input type="text" class="form-control" name="CompanyName" id="CompanyName" required>
+                                    <span class="text-danger mt-2" id="CompanyError">
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Mobile" class="form-label">شماره موبایل</label>
+                                    <input type="text" class="form-control" onkeypress="return isNumber(event)" name="Mobile" id="Mobile" required>
+                                    <span class="text-danger mt-2" id="MobileError">
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Email" class="form-label">ایمیل</label>
+                                    <input type="text" class="form-control" name="Email" id="Email" required>
+                                    <span class="text-danger mt-2" id="EmailError">
+                                    </span>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="Address" class="form-label">آدرس</label>
+                                    <input type="text" class="form-control" name="Address" id="Address" required>
+                                    <span class="text-danger mt-2" id="AddressError">
+                                    </span>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="Password" class="form-label">رمز عبور</label>
+                                    <input type="password" class="form-control" name="Password" id="Password" required>
+                                    <span class="text-danger mt-2" id="PasswordError">
+                                    </span>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary" type="submit">ثبت نام</button>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="tab-pane fade" id="nav-userpass" role="tabpanel" aria-labelledby="nav-userpass-tab">
+
+
+                            <form action="/Home/SignInWithUserPass" m method="post" class="row g-3 needs-validation" novalidate>
+                                <h6>سلام!</h6>
+                                <h6>لطفا نام کاربری و رمز عبور خود را وارد کنید</h6>
+                                <div class="row gx-lg-0 gy-2  align-items-center justify-content-center">
+                                    <div class="col-md-5 mx-2 ">
+                                        <div class="form-outline">
+                                            <label for="validationDefault03" class="form-label">نام کاربری</label>
+                                            <input type="text" class="form-control" oninvalid="this.setCustomValidity('لطفا نام کاربری را وارد کنید')" name="Username" id="Username" required/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 mx-2">
+                                        <div class="form-outline">
+                                            <label for="validationDefault05" class="form-label">رمز عبور</label>
+                                            <input type="password" class="form-control" oninvalid="this.setCustomValidity('لطفا رمز عبور را وارد کنید')" name="Password" id="Password" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary mt-4" type="submit">ورود</button>
+                            </form>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ((charCode > 31 && charCode < 48) || charCode > 57) {
+            return false;
+        }
+        return true;
+    }
+  $(document).ready(function () {
+         $("#mobileNumberForm").submit(function (event) {
+              // Prevent default submission
+              event.preventDefault();
+              
+              // Validate Mobile Number Field
+              let isValid = validateField(
+                  "MobileNumber",           
+                  "MobileNumberError",      
+                  "شماره موبایل",         
+                  { required: true, numeric: true, length: 11 } 
+              );
+      
+              // Submit the form if valid
+              if (isValid) {
+                  this.submit();
+              }
+          });
+       $("#registerForm").submit(function (event) {
+          console.log("submit form");
+          // Prevent form submission if there are validation errors
+          event.preventDefault();
+          let isValid = true;
+  
+          // Validate fields
+          isValid &= validateField("CompanyName", "CompanyError", "نام شرکت/دانشگاه/سازمان", { required: true });
+          isValid &= validateField("Mobile", "MobileError", "موبایل", { required: true, numeric: true, length: 11 });
+          isValid &= validateField("Email", "EmailError", "ایمیل", { required: true, email: true });
+          isValid &= validateField("LastName", "LastNameError", "نام خانوادگی", { required: true });
+          isValid &= validateField("FirstName", "FirstNameError", "نام", { required: true });
+          isValid &= validateField("Password", "PasswordError", "رمز عبور", { required: true });
+          isValid &= validateField("Address", "AddressError", "آدرس", { required: true });
+          if (isValid) {
+              // Form is valid; proceed with submission
+              this.submit();
+          }
+      });
+  
+      function validateField(fieldId, errorMessageId, fieldName, options) {
+          var fieldValue = $("#" + fieldId).val();
+          var isFieldValid = true;
+  
+          // Clear existing error message
+          $("#" + errorMessageId).text("");
+  
+          // Check if required
+          if (options.required && !fieldValue) {
+              isFieldValid = false;
+              $("#" + errorMessageId).text("وارد کردن " + fieldName + " الزامی است");
+          }
+  
+          // Check if numeric
+          if (options.numeric && fieldValue && !/^\d+$/.test(fieldValue)) {
+              isFieldValid = false;
+              $("#" + errorMessageId).text(fieldName + " باید فقط شامل اعداد باشد");
+          }
+  
+          // Check exact length
+          if (options.length && fieldValue && fieldValue.length !== options.length) {
+              isFieldValid = false;
+              $("#" + errorMessageId).text(fieldName + " باید دقیقا " + options.length + " رقم باشد");
+          }
+  
+          // Check minimum length
+          if (options.minLength && fieldValue && fieldValue.length < options.minLength) {
+              isFieldValid = false;
+              $("#" + errorMessageId).text(fieldName + " باید حداقل " + options.minLength + " کاراکتر باشد");
+          }
+  
+          return isFieldValid;
+      }
+  });
+</script>

@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>CleanArchitecture.Infrastructure</RootNamespace>
+        <AssemblyName>CleanArchitecture.Infrastructure</AssemblyName>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CsvHelper" Version="15.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0-rc.2.22476.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0-rc.2.22472.11" />
+        <PackageReference Include="X.PagedList" Version="8.4.3" />
+         <PackageReference Include="Pluralize.NET" Version="1.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="X.PagedList" />
+      <None Remove="Identity\Services\" />
+      <None Remove="Identity\Services\IServices\" />
+      <None Remove="Migrations\" />
+      <None Remove="ChatModel\" />
+      <None Remove="ChatModel\Dto\" />
+      <None Remove="Hubs\" />
+      <None Remove="Hubs\IHubs\" />
+      <None Remove="Services\SMSProvider\" />
+      <None Remove="Services\SMSProvider\Faraz\" />
+      <None Remove="Services\UserCode\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Identity\Services\" />
+      <Folder Include="Identity\Services\IServices\" />
+      <Folder Include="Migrations\" />
+      <Folder Include="ChatModel\Dto\" />
+      <Folder Include="Services\UserCode\" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Application\Application.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Migrations\20241210112630_addPersonInOrder.cs" />
+      <Compile Remove="Migrations\20241210113304_addPersonInOrder1.cs" />
+      <Compile Remove="Migrations\20241210113304_addPersonInOrder1.Designer.cs" />
+    </ItemGroup>
+</Project>

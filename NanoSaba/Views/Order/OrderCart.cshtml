@@ -1,0 +1,363 @@
+﻿@using CleanArchitecture.Application.Common.Interfaces;
+@using CleanArchitecture.Infrastructure.Identity
+@using CleanArchitecture.Application.PagesDto
+@using CleanArchitecture.Domain.Entities.Orders
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model OrderCartPageDto
+@inject IIdentityService IdentityService
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>شرکت آنالیزی نانو مواد صبا</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../favicon.png" rel="icon">
+    <link href=" ../apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    @* <link href="../vendor/aos/aos.css" rel="stylesheet"> *@
+    <link href="../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="../css/main.css" rel="stylesheet">
+    <link href="../css/PinCode.css" rel="stylesheet">
+    <script type="text/javascript" src="../js/pincode.js"></script>
+    <script src="/bootstrap/5/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- =======================================================
+    * Template Name: Impact
+    * Updated: Mar 10 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+<div class="breadcrumbs">
+    <nav>
+        <div class="container">
+            <ol>
+                <li>
+                    <a href="../Home/#hero">صفحه ی اصلی</a>
+                </li>
+                <li>سبد خرید</li>
+            </ol>
+        </div>
+    </nav>
+</div><!-- End Breadcrumbs -->
+<!-- ======= Blog Details Section ======= -->
+<section id="contact" class="contact">
+    <div class="container d-flex flex-column align-items-center justify-content-center" data-aos="fade-up">
+        <div class="row gx-lg-0 gy-2 col-md-12">
+            <h5 class="mx-2 my-2"> سبد خرید شما</h5>
+            <div class="card flex-column col-md-9">
+                <div class="mt-5">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var order in Model.Orders)
+                        {
+                            <li class="list-group-item">
+                                <div class="row g-3 align-items-center">
+                                    <!-- Image Section -->
+                                    <div class="col-md-3 text-center">
+                                        <img src="@order.AnalyzerDevice.MainImage" class="img-fluid rounded" alt="@order.AnalyzerDevice.Name">
+                                    </div>
+
+                                    <!-- Order Details Section -->
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col-auto text-secondary">نوع آنالیز:</div>
+                                                <div class="col-auto">@order.AnalyzerDevice.Name</div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-auto text-secondary">وضعیت سفارش:</div>
+                                                <div class="col-auto">@order.OrderStatus.Title</div>
+                                            </div>
+                                            <!-- Samples Table -->
+                                            <div class="row mt-3">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-sm text-center">
+                                                        <thead class="table-light">
+                                                        <tr>
+                                                            <th scope="col">کد نمونه</th>
+                                                            <th scope="col">نام نمونه</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @foreach (var analyze in order.Analyzes)
+                                                        {
+                                                            <tr>
+                                                                <td>@analyze.TrackingCode</td>
+                                                                <td>@analyze.Name</td>
+                                                            </tr>
+                                                        }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Action Buttons -->
+                                        <div class="row mt-3">
+                                            <div class="col-12 d-flex justify-content-start align-items-center gap-2">
+                                                <button class="btn btn-sm btn-primary"
+                                                        onclick="window.location.href='@Url.ActionLink("GetOrder", "RegisterOrder", new { item = @order.Id.ToString(), isEdit = true })'">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class=" col-md-3">
+                <div class="card mx-2 d-flex align-items-start pull-right " style="width:100%">
+                    <div class="card-body" style="width:100%">
+                        <ul style="padding:0" class="d-flex pull-right list-group list-group-flush">
+                            <li class="list-group-item"><i class="bi bi-bookmark-check-fill  mx-2"> </i> رعایت استاندارهای آنالیزی </li>
+                            <li class="list-group-item"><i class="bi bi-calculator-fill  mx-2"></i> دقت در آنالیزگیری هر آنالیز</li>
+                            <li class="list-group-item"><i class="bi-speedometer  mx-2"></i> سرعت در انجام هر آنالیز</li>
+                            <li class="list-group-item"><i class="bi bi-file-person-fill  mx-2"></i> پشتیبانی در ساعات کاری</li>
+                            <li class="list-group-item">
+                                @* <div class="row mt-2"> *@
+                                @*     <div class="col-md-8"> *@
+                                @*         <p> *@
+                                @*             <b> قیمت: 0 </b> *@
+                                @*         </p> *@
+                                @*     </div> *@
+                                @*     $1$ @if (Model?.AnalyzerDevice?.DiscountPercent is not null && Model?.AnalyzerDevice?.DiscountPercent != 0) #1# *@
+                                @*     $1$ { #1# *@
+                                @*     $1$     <div class="col-md-4"> #1# *@
+                                @*     $1$         <span class="badge bg-danger rounded-pill">@Model?.AnalyzerDevice?.DiscountPercent ٪</span> #1# *@
+                                @*     $1$         <p class="text-decoration-line-through"><small> @Model?.AnalyzerDevice?.Price </small></p> #1# *@
+                                @*     $1$     </div> #1# *@
+                                @*     $1$ } #1# *@
+                                @* </div> *@
+                            </li>
+                            @using (Html.BeginForm("SendToTechnicalExpert", "OrderCart", FormMethod.Post, new { id = "orderForm" }))
+                            {
+                                <li class="list-group-item">
+                                    <button type="submit" style="width:100%"
+                                            class="btn btn-primary @(Model.Orders is { Count: > 0 } ? "" : "disabled")"
+                                            id="submitButton" name="submitButton">
+                                        <i class="bi bi-cart-plus-fill d-flex align-items-center">
+                                            <span style="text-align: center; width: 100%;" class="mx-3 align-items-center">تایید و تکمیل سفارش</span>
+                                        </i>
+                                    </button>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="col-12 mt-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="true" id="invalidCheck" required>
+                                            <label class="form-check-label" for="invalidCheck">
+                                                <button type="button" class="btn btn-link p-0"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModal1"
+                                                        title="  قوانین">
+                                                    قوانین
+                                                </button>
+                                                آزمایشگاه را پذیرفته ام
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" data-aos="none" id="exampleModal1" aria-labelledby="exampleModal1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">قوانین آزمایشگاه</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <ul>
+                                                            <li>خدمات آنالیز برای نمونه‌ی دریافت شده انجام می‌گیرد و نمونه‌برداری باید توسط شخص متقاضی آنالیز انجام شود و در غیر این صورت آزمایشگاه هیچ گونه مسئولیتی در قبال تفکیک، نمونه‌برداری و نام نمونه‌ها بر عهده نمی‌گیرد.</li>
+                                                            <li>متقاضی متعهد می‌گردد که نمونه رادیواکتیو و انفجاری نمی‌باشد، در غیر این صورت هر گونه خسارت مالی و جانی بر عهده متقاضی آنالیز می‌باشد.</li>
+                                                            <li>در صورت بروز حوادث پیش‌بینی نشده، سرویس یا تعمیر دستگاه، زمان پاسخ‌گویی نتایج افزایش می‌یابد.</li>
+                                                            <li>انجام آزمون منوط به پرداخت نهایی وجه آزمون می‌باشد.</li>
+                                                            <li>نمونه‌ها تا دو ماه پس از انجام آنالیز در آزمایشگاه نگهداری می‌شوند و پس از این زمان، امحا می‌شوند.</li>
+                                                            <li>در صورت درخواست عودت نمونه یا صدور فاکتور فیزیکی، هزینه ارسال بر عهده متقاضی می‌باشد.</li>
+                                                            <li>عدم حصول نتیجه مورد نظر متقاضی، مسئولیتی را متوجه آزمایشگاه نمی‌سازد.</li>
+                                                            <li>حداکثر مسئولیت مالی آزمایشگاه در قبال نگهداری از نمونه‌های تحویل گرفته شده به میزان هزینه آنالیز می‌باشد.</li>
+                                                            <li>مدت زمان اعتراض به نتایج ارسال شده تنها یک ماه پس از دریافت نتایج بوده و پس از گذشت این بازه زمانی، آزمایشگاه مسئولیتی در قبال نتایج دریافتی متقاضی بر عهده ندارد.</li>
+                                                            <li>متقاضی حداکثر تا 30 روز پس از دریافت نتایج می‌تواند تقاضای فاکتور رسمی به صورت فیزیکی و با مهر و امضا نماید و پس از گذشت بازه زمانی مذکور، آزمایشگاه مسئولیتی در قبال صدور فاکتور را عهده دار نمی‌باشد.</li>
+                                                            <li>تمامی درخواست‌ها اعم از دریافت فاکتور، عودت نمونه، درخواست آنالیز مجدد، درخواست آنالیزهای تکمیلی دیگر، اعتراض به نتایج و ...، فقط در صورتی که به صورت کتبی در وب سایت شرکت با پیگیری متقاضی دریافت شود، قابل پیگیری بوده و آزمایشگاه هیچ گونه مسئولیتی در قبال درخواست‌های کلامی و تلفنی را بر عهده نمی‌گیرد.</li>
+                                                            <li>آزمایشگاه پس از دریافت هر تعداد نمونه از یک آنالیز مشخص، هیچ گونه مسئولیتی در قبال اطلاع متقاضی از پروسه آنالیزها یا اطلاعات حاوی عدم حصول نتیجه پیش‌بینی شده متقاضی و متوقف کردن آنالیز را برعهده ندارد و این امکان تنها در صورت تقاضای کتبی متقاضی مبنی بر توقف فرآیند آنالیز ممکن خواهد بود.</li>
+                                                            <li>آزمایشگاه هیچ گونه مسئولیتی در قبال نتایج دریافت شده متقاضی از یک نمونه یکسان از آزمایشگاه‌های دیگر و عدم تشابه نتایج بر عهده ندارد.</li>
+                                                            <li>در صورت پذیرش اعتراض، تکرار آنالیز منوط به پرداخت مجدد هزینه آنالیز و وجود نمونه کافی دریافت شده آزمایشگاه در مرحله پذیرش اولیه است و در صورت تشابه نتایج، هیچ هزینه‌ای عودت نمی‌گردد.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">تایید</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div >
+                                    </div >
+
+
+                                    <!-- Order Completed Modal -->
+                                    <div class="modal fade" id="orderCompletedModal" tabindex="-1" aria-labelledby="orderCompletedModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content shadow-lg rounded">
+                                                <div class="modal-header bg-success text-white">
+                                                    <h5 class="modal-title" id="orderCompletedModalLabel">تکمیل سفارش</h5>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <i class="bi bi-check-circle text-success display-4"></i>
+                                                    <p class="mt-3 mb-0">سفارش شما با موفقیت ثبت شد!</p>
+                                                    <p class="mt-3 mb-0">کارشناسان ما در حال بررسی آن هستند.</p>
+                                                    <p class="mt-3 mb-0">می‌توانید نتایج را در بخش سفارشات مشاهده کنید.</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+                                                    <a href="/OrderCart/Index" class="btn btn-success">تایید</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+
+<section id="recent-posts" class="recent-posts sections-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>مقالات پیشنهادی</h2>
+            <p>بخش مقالات، محلی است که مطالبی در زمینه شیمی و علوم مرتبط با آن به صورت مقاله منتشر می‌شود. این بخش می‌تواند برای افزایش دانش و آگاهی عمومی در زمینه شیمی، همچنین بهبود روند تحقیقات و توسعه در این حوزه مفید باشد.</p>
+        </div>
+
+        <div class="row gy-4">
+
+            @if (Model?.Articles is { Count: > 0 })
+            {
+                @foreach (var item in Model?.Articles)
+                {
+                    <div class="col-xl-4 col-md-6">
+                        <article>
+
+                            <div class="post-img d-flex justify-content-center">
+                                <img src="@item.ImageUrl" class=" img-fluid rounded-4" alt=""/>
+                            </div>
+
+                            <p class="post-category">@item.CategoryTitle</p>
+
+                            <h2 class="title">
+                                <a href="blog-details.html">
+                                    @Html.ActionLink(@item.Name, "ArticleById", "Article", new { myParams = item.Id }, null)
+                                </a>
+                            </h2>
+
+                            <div class="d-flex align-items-center">
+                                <div class="post-meta">
+                                    <p class="post-author"> @IdentityService.GetUserName(Convert.ToInt64(item.CreatedBy))</p>
+                                    <p class="post-date">
+                                        <time>@item.Created</time>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </article>
+                    </div>
+                }
+            }
+        </div><!-- End recent posts list -->
+
+    </div>
+</section><!-- End Recent Blog Posts Section -->
+</body>
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ((charCode > 31 && charCode < 48) || charCode > 57) {
+            return false;
+        }
+        return true;
+    }
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("orderForm");
+    const completeOrderModal = new bootstrap.Modal(document.getElementById("orderCompletedModal"));
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Send form data via AJAX
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+              // Check if the response is OK before parsing JSON
+              if (!response.ok) {
+                  throw new Error("Network response was not ok");
+              }
+              return response.json(); // Return the parsed JSON
+          })
+          .then(data => {
+              console.log("Data:", data); // Log the parsed JSON data
+              if (data.isSendToTechnicalExpert) {
+                  // Show the success modal
+                  completeOrderModal.show();
+              } else {
+                  alert(data.message || "An unexpected error occurred.");
+              }
+          })
+    });
+});
+
+
+    $(document).ready(function () {
+        $('.nav-toggle').click(function () {
+            var collapse_content_selector = $(this).attr('href');
+            var toggle_switch = $(this);
+            $(collapse_content_selector).toggle(function () {
+                if ($(this).css('display') == 'none') {
+                    toggle_switch.html('بیشتر');
+                } else {
+                    toggle_switch.html('کمتر');
+                }
+            });
+        });
+
+    });
+</script>

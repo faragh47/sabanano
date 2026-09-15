@@ -1,0 +1,378 @@
+﻿@using CleanArchitecture.Application.Common.Interfaces;
+@using CleanArchitecture.Infrastructure.Identity
+@using CleanArchitecture.Application.PagesDto
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model RegisterOrderPageDto
+@inject IIdentityService IdentityService
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>شرکت آنالیزی نانو مواد صبا</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../favicon.png" rel="icon">
+    <link href=" ../apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    @* <link href="../vendor/aos/aos.css" rel="stylesheet"> *@
+    <link href="../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="../css/main.css" rel="stylesheet">
+    <link href="../css/PinCode.css" rel="stylesheet">
+    <script type="text/javascript" src="../js/pincode.js"></script>
+    <script src="/bootstrap/5/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            direction: rtl;
+        }
+
+        .form-check {
+            text-align: right;
+        }
+
+        .form-check-input {
+            content: "";
+            display: inline-block;
+            width: 19px;
+            height: 19px;
+            margin-right: 5px;
+            position: absolute;
+            right: 0;
+            / /***************change here************/ / top: 3px;
+            background-color: #fff;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            transition: all .25s;
+            color: #fff;
+            text-align: center;
+            line-height: 15px;
+        }
+
+        .form-check-label {
+            margin-left: auto;
+            margin-right: 15px;
+        }
+    </style>
+
+    <!-- =======================================================
+    * Template Name: Impact
+    * Updated: Mar 10 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+@Html.Partial("_ValidationScriptsPartial")
+<body>
+<div class="breadcrumbs">
+    <nav>
+        <div class="container">
+            <ol>
+                <li>
+                    <a href="../Home/#hero">صفحه ی اصلی</a>
+                </li>
+                <li>سفارشات</li>
+            </ol>
+        </div>
+    </nav>
+</div><!-- End Breadcrumbs -->
+<!-- ======= Blog Details Section ======= -->
+<section id="contact" class="contact">
+    <div class="container d-flex flex-column align-items-center justify-content-center" data-aos="fade-up">
+        <div class="row gx-lg-0 gy-2 col-md-12">
+            <h5 class="mx-2">
+                مرحله ی ثبت گرنت
+            </h5>
+            <div class="container mt-1 pt-3">
+                @using (Html.BeginForm("RegisterOrder",
+                            "RegisterOrder", FormMethod.Post))
+                {
+                    <div class="card border-dark mb-3">
+                        <div class="card-header">گرنت</div>
+                        <div class="card-body">
+                            <div class="form-group form-check col-auto">
+                                <input type="checkbox"
+                                       asp-for="@Model.HasGrant"
+                                       class="form-check-input" id="HasGrant" name="HasGrant">
+                                <label class="form-check-label mr-6" for="HasGrant">آیا گرنت دارد</label>
+                            </div>
+                            <div id="grantCardBody" style="display: none;">
+                                <p class="form-text">فاکتور به نام صاحب گرنت صادر می‌شود</p>
+
+                                <div class="row">
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="FirstName">نام</label>
+                                        <input type="text" class="form-control"
+                                               asp-for="@Model.Grant.FirstName"
+                                               id="FirstName" name="FirstName">
+                                        <span class="text-danger mt-2" id="FirstNameError"
+                                              asp-validation-for="@Model.Grant.FirstName">
+                                        </span>
+                                    </div>
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="LastName">نام خانوادگی</label>
+                                        <input type="text" class="form-control"
+                                               asp-for="@Model.Grant.LastName"
+                                               id="LastName" name="LastName">
+                                        <span class="text-danger mt-2" id="LastNameError"
+                                              asp-validation-for="@Model.Grant.LastName">
+                                        </span>
+                                    </div>
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="NationalCode">کد ملی صاحب گرنت</label>
+                                        <input type="number" class="form-control"
+                                               asp-for="@Model.Grant.NationalCode"
+                                               id="NationalCode" name="NationalCode">
+                                        <span class="text-danger mt-2" id="NationalCodeError"
+                                              asp-validation-for="@Model.Grant.NationalCode">
+                                        </span>
+                                    </div>
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="UniversityName">نام دانشگاه</label>
+                                        <input type="text" class="form-control"
+                                               asp-for="@Model.Grant.UniversityName"
+                                               id="UniversityName" name="UniversityName">
+                                        <span class="text-danger mt-2" id="UniversityNameError"
+                                              asp-validation-for="@Model.Grant.UniversityName">
+                                        </span>
+                                    </div>
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="TelNumber">شماره تماس</label>
+                                        <input type="number" class="form-control"
+                                               asp-for="@Model.Grant.TelNumber"
+                                               id="TelNumber" name="TelNumber">
+                                        <span class="text-danger mt-2" id="TelNumberError"
+                                              asp-validation-for="@Model.Grant.TelNumber">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-dark mb-3">
+                        <div class="card-header">اطلاعات شرکت</div>
+                        <div class="card-body">
+                            <div class="form-group form-check col-auto">
+                                <input type="checkbox"
+                                       asp-for="@Model.HasCompany"
+                                       class="form-check-input" id="HasCompany" name="HasCompany">
+                                <label class="form-check-label mr-6" for="HasGrant">آیا فاکتور به نام شخص دیگری صادر شود</label>
+                            </div>
+                            <div id="companyCardBody" style="display: none;">
+                                <div class="form-group">
+                                    <p class="form-text">فاکتور به نام صاحب گرنت صادر می‌شود</p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="CompanyNationalCode">کد ملی صاحب شرکت</label>
+                                        <input type="number" class="form-control"
+                                               asp-for="@Model.Company.NationalCode"
+                                               id="CompanyNationalCode" name="CompanyNationalCode">
+                                        <span class="text-danger mt-2" id="CompanyNationalCodeError"
+                                              asp-validation-for="@Model.Company.NationalCode">
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="RegisterCode">شماره ثبت</label>
+                                        <input type="text" class="form-control"
+                                               asp-for="@Model.Company.RegisterCode"
+                                               id="RegisterCode" name="RegisterCode">
+                                    </div>
+
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="EconomicNumber">شماره اقتصادی</label>
+                                        <input type="text" class="form-control"
+                                               asp-for="@Model.Company.EconomicNumber"
+                                               id="EconomicNumber" name="EconomicNumber">
+                                    </div>
+
+                                    <div class="form-group mt-2 col-md-6">
+                                        <label for="MobileNumber">شماره همراه رابط</label>
+                                        <input type="number" class="form-control"
+                                               asp-for="@Model.Company.MobileNumber"
+                                               id="MobileNumber" name="MobileNumber">
+                                    </div>
+                                </div>
+                            </div>
+                        </div >
+                    </div>
+
+                    <div class="card border-dark mb-3">
+                        <div class="card-body">
+                            <div class="form-group form-check mt-3">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       asp-for="@Model.IsRequireToReturnSample"
+                                       id="isRequireToReturnSample" name="isRequireToReturnSample">
+                                <label class="form-check-label" for="isRequireToReturnSample">متقاضی نیاز به عودت نمونه را دارد</label>
+                            </div>
+                            @* <div class="form-group form-check"> *@
+                            @*     <input type="checkbox" *@
+                            @*            class="form-check-input" *@
+                            @*            asp-for="@Model.IsRequireHeader" *@
+                            @*            id="isRequireHeader" name="isRequireHeader"> *@
+                            @*     <label class="form-check-label" for="isRequireHeader">متقاضی نیاز به دریافت نتایج درون سر برگ دارد</label> *@
+                            @* </div> *@
+                        </div>
+                    </div>
+                    <div class="card border-dark mb-3">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>توضیحات</label>
+                                <input type="text" class="form-control"
+                                       asp-for="@Model.Description">
+                            </div>
+                        </div>
+                    </div>
+                    if (Model.IsCreatable || Model.IsEditable)
+                    {
+                        <button type="submit" name="button" value="back" class="btn btn-danger">مرحله ی قبل</button>
+                        <button type="submit" name="button" value="register" class="btn btn-success">@Model.ActionMessage سفارش </button>
+                    }
+                }
+            </div>
+
+
+        </div>
+    </div>
+</section>
+</body>
+
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ((charCode > 31 && charCode < 48) || charCode > 57) {
+            return false;
+        }
+        return true;
+    }
+   document.addEventListener('DOMContentLoaded', function () {
+       const hasGrantCheckbox = document.getElementById("HasGrant");
+       const hasCompanyCheckbox = document.getElementById("HasCompany");
+       const grantCardBody = document.getElementById("grantCardBody");
+       const TelNumber = document.getElementById("TelNumber");
+       const UniversityName = document.getElementById("UniversityName");
+       const NationalCode = document.getElementById("NationalCode");
+       const FirstName = document.getElementById("FirstName");
+       const LastName = document.getElementById("LastName");
+       const companyCardBody = document.getElementById("companyCardBody");
+       const CompanyNationalCode = document.getElementById("CompanyNationalCode");
+   
+       // Toggle grant fields visibility and required attributes
+       hasGrantCheckbox.addEventListener('change', function () {
+           if (this.checked) {
+               grantCardBody.style.display = "block";
+               TelNumber.setAttribute('required', 'required');
+               UniversityName.setAttribute('required', 'required');
+               NationalCode.setAttribute('required', 'required');
+               FirstName.setAttribute('required', 'required');
+               LastName.setAttribute('required', 'required');
+           } else {
+               grantCardBody.style.display = "none";
+               TelNumber.removeAttribute('required');
+               UniversityName.removeAttribute('required');
+               NationalCode.removeAttribute('required');
+               FirstName.removeAttribute('required');
+               LastName.removeAttribute('required');
+           }
+       });
+   
+       // Toggle company fields visibility and required attributes
+       hasCompanyCheckbox.addEventListener('change', function () {
+           if (this.checked) {
+               companyCardBody.style.display = "block";
+               CompanyNationalCode.setAttribute('required', 'required');
+           } else {
+               companyCardBody.style.display = "none";
+               CompanyNationalCode.removeAttribute('required');
+           }
+       });
+   });
+   
+   // jQuery for toggling and form validation
+   $(document).ready(function () {
+       // Toggle collapse content for navigation
+       $('.nav-toggle').click(function () {
+           var collapse_content_selector = $(this).attr('href');
+           var toggle_switch = $(this);
+           $(collapse_content_selector).toggle(function () {
+               toggle_switch.html($(this).css('display') === 'none' ? 'بیشتر' : 'کمتر');
+           });
+       });
+   
+       // Form validation
+       $("form").submit(function (event) {
+           let isValid = true;
+           // Validate fields with their specific rules
+           isValid &= validateField("CompanyNationalCode", "CompanyNationalCodeError", "کد ملی شرکت", { required: $("#HasCompany").is(":checked"), numeric: true, length: 10 });
+           isValid &= validateField("TelNumber", "TelNumberError", "شماره تلفن", { required: $("#HasGrant").is(":checked"), numeric: true, length: 11 });
+           isValid &= validateField("UniversityName", "UniversityNameError", "نام دانشگاه", { required: $("#HasGrant").is(":checked") });
+           isValid &= validateField("NationalCode", "NationalCodeError", "کد ملی", { required: $("#HasGrant").is(":checked"), numeric: true, length: 10 });
+           isValid &= validateField("LastName", "LastNameError", "نام خانوادگی", { required: $("#HasGrant").is(":checked") });
+           isValid &= validateField("FirstName", "FirstNameError", "نام", { required: $("#HasGrant").is(":checked") });
+   
+       });
+   
+       function validateField(fieldId, errorMessageId, fieldName, options) {
+           var fieldValue = $("#" + fieldId).val();
+           var isFieldValid = true;
+   
+           // Clear previous error messages
+           $("#" + errorMessageId).text("");
+   
+           // Required validation
+           if (options.required && (!fieldValue || fieldValue.trim() === "")) {
+               isFieldValid = false;
+               $("#" + errorMessageId).text("وارد کردن " + fieldName + " الزامی است");
+           }
+   
+           // Numeric validation
+           if (options.numeric && fieldValue && !/^\d+$/.test(fieldValue)) {
+               isFieldValid = false;
+               $("#" + errorMessageId).text(fieldName + " باید فقط شامل اعداد باشد");
+           }
+   
+           // Exact length validation
+           if (options.length && fieldValue && fieldValue.length !== options.length) {
+               isFieldValid = false;
+               $("#" + errorMessageId).text(fieldName + " باید دقیقا " + options.length + " رقم باشد");
+           }
+   
+           // Styling invalid fields
+           if (!isFieldValid) {
+               $("#" + fieldId).addClass("is-invalid");
+           } else {
+               $("#" + fieldId).removeClass("is-invalid");
+           }
+   
+           return isFieldValid;
+       }
+    });
+</script>

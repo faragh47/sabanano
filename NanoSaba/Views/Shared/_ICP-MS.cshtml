@@ -1,0 +1,96 @@
+﻿@using CleanArchitecture.Application.PagesDto
+<!-- Pages/Shared/_SampleFormAndListPartial.cshtml -->
+@model CleanArchitecture.Application.Orders.Commands.Create.OrderAnalyzeCommand
+<div class="card">
+    <input type="hidden" name="key" value="ICP-MS"/>
+    <div class="card-header">آنالیز ICP-MS</div>
+    <div class="card-body">
+        <div class="row mt-2">
+            <div class="row g-3">
+                <!-- Sample Name -->
+                <div class="col-md-6">
+                    <label for="name" class="form-label">نام نمونه</label>
+                    <input type="text" class="form-control"
+                           asp-for="@Model.Name" id="name"
+                           name="Name" placeholder="نام نمونه را وارد کنید" required>
+                    <span class="text-danger mt-1 d-block" id="NameError">
+                        <!-- Error placeholder for name -->
+                    </span>
+                </div>
+                <div class="col-md-6">
+                    <label for="name" class="form-label">نام عنصر</label>
+                    <input type="text" class="form-control"
+                           asp-for="@Model.ICPMS.Element" id="Element"
+                           name="Element" placeholder="نام عنصر را وارد کنید" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="name" class="form-label">توضیحات</label>
+                    <input type="text" class="form-control"
+                           asp-for="@Model.ICPMS.Description" id="description"
+                           name="description" placeholder="توضیحات را وارد کنید">
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        <button type="button" class="btn btn-link p-0"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal1"
+                                title="  قوانین">
+                            قوانین
+                        </button>
+                        مربوط به ثبت ICP-MS را پذیرفته ام
+                    </label>
+                </div>
+            </div>
+            <div class="modal fade" data-aos="none" id="exampleModal1" aria-labelledby="exampleModal1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">ICP-MS قوانین مربوط به آنالیز </h5>
+                            </div>
+                            <div class="modal-body">
+                                <ul>
+                                    <li>
+                                        خدمات آنالیز برای نمونه‌های دریافت شده انجام شده و نمونه‌برداری باید توسط خود متقاضی انجام پذیرد و نمونه حتما در ظرف مناسب قرار داده شود.
+                                    </li>
+                                    <li>
+                                        نمونه‌های پذیرش شده باید به صورت خردایش و نرمایش شده باشند، در غیر این صورت هزینه خردایش و نرمایش نمونه اضافه می‌گردد.
+                                    </li>
+                                    <li>
+                                        حداقل مقدار وزنی جهت نمونه‌های پودری 10 تا 15 گرم می‌باشد (برای هضم چهار اسید) و حداقل مقدار وزنی 1 گرم می‌باشد (برای هضم ماکروویو)، نمونه‌برداری باید توسط خود متقاضی انجام پذیرد. در صورت نیاز به خردایش و نرمایش، مقدار نمونه ارسالی باید 50 گرم باشد.
+                                    </li>
+                                    <li>
+                                        متقاضی متعهد می‌گردد که نمونه رادیواکتیو و انفجاری نمی‌باشد، در غیر این صورت هرگونه خسارت جانی و مالی بر عهده متقاضی خواهد بود.
+                                    </li>
+                                    <li>
+                                        در صورت بروز حوادث پیش‌بینی‌نشده یا سرویس و تعمیر دستگاه، به زمان جواب‌دهی افزوده می‌شود.
+                                    </li>
+                                    <li>
+                                        انجام آزمون، منوط به پرداخت نهایی وجه آزمون می‌باشد.
+                                    </li>
+                                    <li>
+                                        نمونه‌ها تا دو ماه پس از انجام آزمون نگهداری می‌گردند. هزینه پست یا پیک جهت برگشت به عهده مشتری می‌باشد.
+                                    </li>
+                                    <li>
+                                        عدم حصول نتیجه به هر دلیل، مسئولیتی را متوجه آزمایشگاه نمی‌نماید.
+                                    </li>
+                                    <li>
+                                        حداکثر مسئولیت مالی آزمایشگاه در قبال نگهداری از نمونه‌های تحویل‌گرفته‌شده به میزان هزینه آنالیز می‌باشد.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">تایید</button>
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            </div >
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+</script>

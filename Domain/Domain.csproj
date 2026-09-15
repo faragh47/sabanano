@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>CleanArchitecture.Domain</RootNamespace>
+        <AssemblyName>CleanArchitecture.Domain</AssemblyName>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="9.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.0-rc.2.22472.11" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Entities\BasicInformation\" />
+      <None Remove="Entities\HrManagment\" />
+      <None Remove="Entities\Address\" />
+      <None Remove="Entities\RestaurantAggregate\" />
+      <None Remove="Entities\OrderAggregate\" />
+      <None Remove="Entities\Order\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Entities\BasicInformation\" />
+      <Folder Include="Entities\Address\" />
+    </ItemGroup>
+</Project>

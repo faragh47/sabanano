@@ -1,0 +1,120 @@
+﻿@using CleanArchitecture.Application.PagesDto
+<!-- Pages/Shared/_SampleFormAndListPartial.cshtml -->
+@model CleanArchitecture.Application.Orders.Commands.Create.OrderAnalyzeCommand
+<div class="card">
+    <input type="hidden" name="key" value="TGA"/>
+    <div class="card-header">آنالیز TGA</div>
+    <div class="card-body">
+        <div class="row mt-2">
+            <div class="row g-3">
+                <!-- Sample Name -->
+                <div class="col-md-6">
+                    <label for="name" class="form-label">نام نمونه</label>
+                    <input type="text" class="form-control"
+                           asp-for="@Model.Name" id="name"
+                           name="Name" placeholder="نام نمونه را وارد کنید">
+                    <span class="text-danger mt-1 d-block" id="NameError">
+                        <!-- Error placeholder for name -->
+                    </span>
+                </div>
+                <div class="col-md-6">
+                    <label for="tempertureStart" class="form-label">دمای شروع</label>
+                    <input type="number" class="form-control"
+                           asp-for="@Model.TGA.TempertureStart" id="tempertureStart"
+                           name="tempertureStart" placeholder=" دمای شروع مورد نظر را وارد کنید">
+                </div>
+                <div class="col-md-6">
+                    <label for="tempertureEnd" class="form-label">حداکثر دما</label>
+                    <input type="number" class="form-control"
+                           asp-for="@Model.TGA.TempertureEnd" id="tempertureEnd"
+                           name="tempertureEnd" placeholder=" حداکثر دما مورد نظر را وارد کنید" required>
+                    <span class="text-danger mt-1 d-block" id="TempError"></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="rate" class="form-label">ریت</label>
+                    <input type="number" class="form-control"
+                           asp-for="@Model.TGA.Rate" id="rate"
+                           name="rate" placeholder=" ریت مورد نظر را وارد کنید" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="environment" class="form-label">محیط</label>
+                    <select class="form-select" name="environment" id="environment" required>
+                        <option value="آرگون" selected>آرگون</option>
+                        <option value="هوا">هوا</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        <button type="button" class="btn btn-link p-0"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal1"
+                                title="  قوانین">
+                            قوانین
+                        </button>
+                        مربوط به ثبت TGA را پذیرفته ام
+                    </label>
+                </div>
+            </div>
+            <div class="modal fade" data-aos="none" id="exampleModal1" aria-labelledby="exampleModal1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">TGA قوانین مربوط به آنالیز </h5>
+                            </div>
+                            <div class="modal-body">
+                                <ul>
+                                    <li>
+                                        خدمات آنالیز برای نمونه‌های دریافت شده انجام شده و نمونه‌برداری باید توسط خود متقاضی انجام پذیرد و نمونه حتما در ظرف مناسب قرار داده شود.
+                                    </li>
+                                    <li>
+                                        متقاضی متعهد می‌گردد که نمونه رادیواکتیو و انفجاری نمی‌باشد، در غیر این صورت هرگونه خسارت جانی و مالی بر عهده متقاضی خواهد بود.
+                                    </li>
+                                    <li>
+                                        در صورت بروز حوادث پیش‌بینی‌نشده یا سرویس و تعمیر دستگاه، به زمان جواب‌دهی افزوده می‌شود.
+                                    </li>
+                                    <li>
+                                        آزمایشگاه نانو مواد صبا در صورت لزوم مجاز به استفاده از پیمانکار فرعی برای خدمات آنالیزی خود می‌باشد.
+                                    </li>
+                                    <li>
+                                        انجام آزمون، منوط به پرداخت نهایی وجه آزمون می‌باشد.
+                                    </li>
+                                    <li>
+                                        نمونه‌ها تا دو ماه پس از انجام آزمون نگهداری می‌گردند. هزینه پست یا پیک جهت برگشت به عهده مشتری می‌باشد.
+                                    </li>
+                                    <li>
+                                        عدم حصول نتیجه به هر دلیل، مسئولیتی را متوجه آزمایشگاه نمی‌نماید.
+                                    </li>
+                                    <li>
+                                        حداکثر مسئولیت مالی آزمایشگاه در قبال نگهداری از نمونه‌های تحویل‌گرفته‌شده به میزان هزینه آنالیز می‌باشد.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">تایید</button>
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            </div >
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+document.getElementById('tempertureEnd').addEventListener('input', function () {
+    const maxAllowedTemp = 1000;
+    const tempInput = parseFloat(this.value);
+    const tempError = document.getElementById('TempError');
+
+    if (tempInput > maxAllowedTemp) {
+        tempError.textContent = "حداکثر دمای انجام آنالیز 1000 درجه سانتی‌گراد می‌باشد.";
+        this.value = ''; // Clear the input field
+        this.classList.add('is-invalid'); // Bootstrap class for invalid input
+    } else {
+        tempError.textContent = '';
+        this.classList.remove('is-invalid');
+    }});
+</script>

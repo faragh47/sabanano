@@ -1,0 +1,421 @@
+﻿@using CleanArchitecture.Application.Common.Interfaces;
+@using CleanArchitecture.Infrastructure.Identity
+@using CleanArchitecture.Application.PagesDto
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model RegisterOrderPageDto
+@inject IIdentityService IdentityService
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>شرکت آنالیزی نانو مواد صبا</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <!-- Favicons -->
+    <link href="../favicon.png" rel="icon">
+    <link href=" ../apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    @* <link href="../vendor/aos/aos.css" rel="stylesheet"> *@
+    <link href="../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="../css/main.css" rel="stylesheet">
+    <style>
+        body {
+            direction: rtl;
+        }
+        /* Custom style for button with no background */
+        .btn-no-background {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            cursor: pointer;
+        }
+        .btn-no-background:hover {
+            color: #007bff; /* Optional: color change on hover */
+        }
+        .form-check {
+            text-align: right;
+            position: relative; /* Ensure the checkbox positioning works properly */
+        }
+
+        .form-check-input {
+            content: "";
+            display: inline-block;
+            width: 19px;
+            height: 19px;
+            margin-right: 5px;
+            position: absolute;
+            right: 0;
+            top: 3px; /* Adjust if necessary to vertically center */
+            background-color: #fff;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: all .25s;
+            color: #fff;
+            text-align: center;
+            line-height: 15px;
+        }
+        .form-check-label {
+            margin-right: 30px; /* Adjust as needed for spacing between checkbox and label */
+            padding-left: 25px; /* Additional padding for better spacing */
+            white-space: nowrap; /* Prevent label text from wrapping to a new line */
+        }
+    </style>
+</head>
+
+<body>
+<div class="breadcrumbs">
+    <nav>
+        <div class="container">
+            <ol>
+                <li>
+                    <a href="../Home/#hero">صفحه ی اصلی</a>
+                </li>
+                <li>سفارشات</li>
+
+            </ol>
+        </div>
+    </nav>
+</div><!-- End Breadcrumbs -->
+<!-- ======= Blog Details Section ======= -->
+<section id="contact" class="contact">
+<div class="container d-flex flex-column align-items-center justify-content-center" data-aos="fade-up">
+    <div class="row gx-lg-0 gy-2 col-md-12">
+        <h5 class="mx-2">
+            @{@Model.ActionMessage}
+            سفارش @Model.Name
+        </h5>
+        @using (Html.BeginForm("AddSample",
+                    "RegisterOrder", FormMethod.Post, new { id = "myForm" }))
+        {
+            <div class="container mt-1 pt-3">
+                <div class="card border-dark mb-3">
+                    @Html.Partial(@$"_{@Model.Name}", @Model.OrderAnalyze)
+                    @* @Html.Partial("_BET") *@
+                </div>
+                <div class="card border-dark mb-3">
+                    <div class="card-header">شرایط نگه داری</div>
+                    <div class="card-body">
+                        <input type="hidden" name="Id" asp-for="@Model.OrderId"/>
+
+                        <!-- Row for Checkboxes -->
+                        <div class="row mt-1">
+                            <div class="col-12 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" onclick="checkedHasNoConditon(this)"
+                                           asp-for="@Model.OrderAnalyze.HasNotAnyCondition"
+                                           class="form-check-input" id="hasNotAnyCondition" name="hasNotAnyCondition">
+                                    <label class="form-check-label" for="hasNotAnyCondition">نمونه شرایط نگه داری خاصی ندارد</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsSensitiveToLight"
+                                           onclick="uncheckHasNoConditon()"
+                                           class="form-check-input" id="isSensitiveToLight" name="isSensitiveToLight">
+                                    <label class="form-check-label" for="isSensitiveToLight">حساس به نور</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" onclick="uncheckHasNoConditon()"
+                                           asp-for="@Model.OrderAnalyze.IsSensitiveToHumidity"
+                                           class="form-check-input" id="isSensitiveToHumidity" name="isSensitiveToHumidity">
+                                    <label class="form-check-label" for="isSensitiveToHumidity">حساس به رطوبت</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row for Input Fields -->
+                        <div class="row mt-3">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="speceficTemperture">نگه داری در دمای پایین</label>
+                                    <input type="number" step="0.1"
+                                           class="form-control"
+                                           asp-for="@Model.OrderAnalyze.SpeceficTemperture"
+                                           id="speceficTemperture" name="speceficTemperture">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="speceficAtmosphere">نگه داری در اتمسفر خاص</label>
+                                    <input type="number" step="0.1"
+                                           class="form-control"
+                                           asp-for="@Model.OrderAnalyze.SpeceficAtmosphere"
+                                           id="speceficAtmosphere" name="speceficAtmosphere">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-dark mb-3">
+                    <div class="card-header">ایمنی</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.HasNoSafety" class="form-check-input" id="hasNoSafety" name="hasNoSafety" onclick="checkedHasNoSafety(this)">
+                                    <label class="form-check-label" for="hasNoSafety">شرایط ایمنی خاصی ندارد</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsPoisonous" class="form-check-input" id="isPoisonous" name="isPoisonous" onclick="uncheckHasNoSafety()">
+                                    <label class="form-check-label" for="isPoisonous">سمی</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsEscapable" class="form-check-input" id="isEscapable" name="isEscapable" onclick="uncheckHasNoSafety()">
+                                    <label class="form-check-label" for="isEscapable">فرار</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsFlammable" class="form-check-input" id="isFlammable" name="isFlammable" onclick="uncheckHasNoSafety()">
+                                    <label class="form-check-label" for="isFlammable">قابل اشتعال</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsBadForBreathing" class="form-check-input" id="isBadForBreathing" name="isBadForBreathing" onclick="uncheckHasNoSafety()">
+                                    <label class="form-check-label" for="isBadForBreathing">محرک دستگاه تنفسی</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsAdsorbBySkin" class="form-check-input" id="isAdsorbBySkin" name="isAdsorbBySkin" onclick="uncheckHasNoSafety()">
+                                    <label class="form-check-label" for="isAdsorbBySkin">قابل جذب از طریق پوست</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsSickness" class="form-check-input" id="isSickness" name="isSickness" onclick="uncheckHasNoSafety()">
+                                    <label class="form-check-label" for="isSickness">بیماری زا</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" asp-for="@Model.OrderAnalyze.IsExplosive" class="form-check-input" id="isExplosive" name="isExplosive" onclick="uncheckHasNoSafety()">
+                                    <label class="form-check-label" for="isExplosive">انفجاری</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card border-dark mb-3">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="description">توضیحات</label>
+                            <input type="text" class="form-control"
+                                   asp-for="@Model.OrderAnalyze.Description"
+                                   id="description" name="description">
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="description">محدوده پذیرش نتایج/استاندارد/ویژگی مورد نظر</label>
+                            <input type="text"
+                                   class="form-control"
+                                   asp-for="@Model.OrderAnalyze.AdditionalDescription"
+                                   id="additionalDescription" name="additionalDescription">
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-dark mb-3">
+                    <div class="card-header">نمونه ها:</div>
+                    <div class="card-body">
+                        @if (Model.OrderAnalyzes is { Count: > 0 })
+                        {
+                            int counter = 0;
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped align-middle text-center">
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">ردیف</th>
+                                        <th scope="col">نام نمونه</th>
+                                        <th scope="col">عملیات</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var bet in Model.OrderAnalyzes)
+                                    {
+                                        <input type="hidden" id="analyzeId" name="analyzeId"/>
+                                        counter++;
+                                        <tr>
+                                            <td>@counter</td>
+                                            <td>@bet.Name</td>
+                                            <td>
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-primary me-2"
+                                                        name="button"
+                                                        value="edit"
+                                                        onclick="submitForm('edit', '@bet.Name')"
+                                                        title="ویرایش"
+                                                        aria-label="ویرایش @bet.Name">
+                                                    <i class="bi bi-pen-fill"></i>
+                                                </button>
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        name="button"
+                                                        value="delete"
+                                                        onclick="submitForm('delete', '@bet.Name')"
+                                                        title="حذف"
+                                                        aria-label="حذف @bet.Name">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center">هیچ نمونه‌ای ثبت نشده است.</p>
+                        }
+                    </div>
+                </div>
+                @if (Model.IsCreatable || Model.IsEditable)
+                {
+                    <button type="submit" name="button" value="addSample" class="btn btn-primary mt-3">
+                        @Model.ActionMessage
+                        کردن نمونه
+                    </button>
+                    @if (Model.OrderAnalyzes is { Count: > 0 })
+                    {
+                        <button type="button"
+                                onclick="submitForm('nextLevel')"
+                                name="button" value="nextLevel" class="btn btn-success mt-3">
+                            رفتن به مرحله ی بعد
+                        </button>
+                    }
+
+                    @Html.Hidden("ActionType", "")
+                    <!-- Hidden field for action type -->
+                    @* <button type="submit" class="btn btn-primary">@Model.ActionMessage سفارش </button> *@
+                }
+            </div>
+        }
+    </div >
+</div >
+</section >
+</body >
+</html >
+<script type="text/javascript">
+                       function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ((charCode > 31 && charCode < 48) || charCode > 57)
+        {
+            return false;
+        }
+
+        return true;
+    }
+    
+ function setId(id) {
+            // Set the order ID in the hidden input field
+            document.getElementById('analyzeId').value = id;
+        }
+                       function submitForm(action, id = null) {
+                           var form = document.getElementById('myForm');
+
+                           // Set actionType flag based on which button was clicked
+                           document.getElementById('ActionType').value = action;
+                           // Set the hidden analyzeId for the specific action (edit/delete)
+                           if (id) {
+                               document.getElementById('analyzeId').value = id;
+                           }
+
+                           // Disable validation only for Edit or Delete
+                           if (action === 'edit' || action === 'delete') {
+                               form.setAttribute('novalidate', 'novalidate'); // Disable form validation
+                           } else {
+                               form.removeAttribute('novalidate'); // Enable form validation for Add
+                           }
+
+                           // Submit the form programmatically
+                           form.submit();
+                       }
+
+                       function checkedHasNoConditon(checkbox) {
+                           // Get the other checkboxes
+                           var isSensitiveToLight = document.getElementById("isSensitiveToLight");
+                           var isSensitiveToHumidity = document.getElementById("isSensitiveToHumidity");
+                           if (checkbox.checked) {
+                               isSensitiveToLight.checked = false;
+                               isSensitiveToHumidity.checked = false;
+                           }
+                       }
+
+                       function uncheckHasNoConditon() {
+                           var hasNotAnyCondition = document.getElementById("hasNotAnyCondition");
+                           if (document.getElementById("isSensitiveToLight").checked
+                             ||document.getElementById("isSensitiveToHumidity").checked) {
+                               hasNotAnyCondition.checked = false;
+                           }
+                       }
+                       function checkedHasNoSafety(checkbox) {
+                           // List of safety-related checkboxes
+                           var safetyCheckboxes = [
+                               document.getElementById("isPoisonous"),
+                               document.getElementById("isEscapable"),
+                               document.getElementById("isFlammable"),
+                               document.getElementById("isBadForBreathing"),
+                               document.getElementById("isAdsorbBySkin"),
+                               document.getElementById("isSickness"),
+                               document.getElementById("isExplosive")
+                           ];
+
+                           // If "HasNoSafety" is checked, uncheck all other safety checkboxes
+                           if (checkbox.checked) {
+                               safetyCheckboxes.forEach(function (checkbox) {
+                                   checkbox.checked = false;
+                               });
+                           }
+                       }
+
+                       // When any safety-related checkbox is checked, uncheck "HasNoSafety"
+                       function uncheckHasNoSafety() {
+                           var hasNoSafety = document.getElementById("hasNoSafety");
+
+                           var safetyCheckboxes = [
+                               document.getElementById("isPoisonous"),
+                               document.getElementById("isEscapable"),
+                               document.getElementById("isFlammable"),
+                               document.getElementById("isBadForBreathing"),
+                               document.getElementById("isAdsorbBySkin"),
+                               document.getElementById("isSickness"),
+                               document.getElementById("isExplosive")
+                           ];
+
+                           // If any safety-related checkbox is checked, uncheck "HasNoSafety"
+                           if (safetyCheckboxes.some(function (checkbox) { return checkbox.checked; })) {
+                               hasNoSafety.checked = false;
+                           }
+                       }
+    $(document).ready(function() {
+        $('.nav-toggle').click(function() {
+            var collapse_content_selector = $(this).attr('href');
+            var toggle_switch = $(this);
+                $(collapse_content_selector).toggle(function() {
+                if ($(this).css('display') == 'none') {
+                    toggle_switch.html('بیشتر');
+                } else {
+                    toggle_switch.html('کمتر');
+                }
+            });
+        });
+    });
+    </script >

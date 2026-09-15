@@ -1,0 +1,128 @@
+﻿@using CleanArchitecture.Application.PagesDto
+<!-- Pages/Shared/_SampleFormAndListPartial.cshtml -->
+@model CleanArchitecture.Application.Orders.Commands.Create.OrderAnalyzeCommand
+<div class="card">
+    <input type="hidden" name="key" value="FTIR"/>
+    <div class="card-header">آنالیز FTIR</div>
+    <div class="card-body">
+        <div class="row mt-2">
+            <div class="row g-3">
+                <!-- Sample Name -->
+                <div class="col-md-6">
+                    <label for="name" class="form-label">نام نمونه</label>
+                    <input type="text" class="form-control"
+                           asp-for="@Model.Name" id="name"
+                           name="Name" placeholder="نام نمونه را وارد کنید" required>
+                    <span class="text-danger mt-1 d-block" id="NameError">
+                        <!-- Error placeholder for name -->
+                    </span>
+                </div>
+                <div class="col-md-6">
+                    <label for="sampleState" class="form-label">حالت نمونه</label>
+                    <select class="form-select" name="sampleState" id="sampleState" required>
+                        <option value="مایع" selected>مایع</option>
+                        <option value="بالک">جامد</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="sampleType" class="form-label">نوع ماده</label>
+                    <select class="form-select" name="sampleType" id="sampleType" required>
+                        <!-- Options will be dynamically updated -->
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="name" class="form-label">ترکیبات نمونه</label>
+                    <input type="text" class="form-control"
+                           asp-for="@Model.Ftir.SampleComposition" id="sampleComposition"
+                           name="sampleComposition" placeholder="ترکیبات نمونه را وارد کنید" required>
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        <button type="button" class="btn btn-link p-0"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal1"
+                                title="  قوانین">
+                            قوانین
+                        </button>
+                        مربوط به ثبت FTIR را پذیرفته ام
+                    </label>
+                </div>
+            </div>
+            <div class="modal fade" data-aos="none" id="exampleModal1" aria-labelledby="exampleModal1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">قوانین مربوط به آنالیز FTIR</h5>
+                            </div>
+                            <div class="modal-body">
+                                <ul>
+                                    <li>
+                                        نمونه‌های دریافت شده جهت آنالیز FT-IR باید به صورت پودری باشند، نمونه‌های توده‌ای و بالک بنا به
+                                        تجربه‌ی اپراتور و شرایط نمونه ارسالی انجام می‌شوند. نمونه‌های فیلمی، توده‌ای و مایع امکان آنالیز
+                                        توسط ATR را نیز دارند که باید توسط متقاضی تعیین شوند.
+                                    </li>
+                                    <li>
+                                        نمونه ارسالی جهت آنالیز FT-IR باید حداقل 0.05 گرم باشد و در صورتی که نمونه مایع باشد حداقل مقدار
+                                        ارسالی باید 0.5 سی‌سی باشد. نمونه‌های فیلم نازک یا توده‌ای باید قطعه‌ای (0.5cm×0.5cm) باشند.
+                                    </li>
+                                    <li>
+                                        نمونه‌هایی که به صورت مجهول ارسال می‌شوند، با توجه به نوع نمونه و نیازمندی آن به تکرار آنالیز‌های
+                                        متعدد یا آماده‌سازی‌های خاص، ممکن است مشمول هزینه‌های اضافی شوند که به متقاضی اطلاع داده می‌شود.
+                                    </li>
+                                    <li>
+                                        نمونه‌هایی که نیاز به آماده‌سازی دارند، هزینه آماده‌سازی از قبیل حرارت‌دهی، خشک کردن، استخراج و
+                                        ... با توجه به تعرفه‌های تعریف‌شده به هزینه خالص آنالیز اضافه می‌شوند.
+                                    </li>
+                                    <li>
+                                        آنالیز به صورت کیفی صورت می‌پذیرد.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">تایید</button>
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            </div >
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function () {
+          const sampleState = document.getElementById("sampleState");
+          const sampleType = document.getElementById("sampleType");
+          if (!sampleState || !sampleType) {
+              return; // Exit if elements are not found
+          }
+          sampleState.addEventListener("change", function () {
+              const selectedState = this.value;
+              // Clear existing options
+              sampleType.innerHTML = "";
+   
+              // Define options based on selected state
+              const options =
+                  selectedState === "مایع"
+                      ? [
+                            { value: "محلول(چند جزيی)", text: "محلول(چند جزيی)" },
+                            { value: "محلول(تک جزيی)", text: "محلول(تک جزيی)" },
+                        ]
+                      : [
+                            { value: "پودری", text: "پودری" },
+                            { value: "بالک", text: "بالک" },
+                            { value: "فیلم", text: "فیلم" },
+                        ];
+              options.forEach((option) => {
+                  const opt = document.createElement("option");
+                  opt.value = option.value;
+                  opt.textContent = option.text;
+                  sampleType.appendChild(opt);
+              });
+          });
+          sampleState.dispatchEvent(new Event("change"));
+      });
+</script>

@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="rtl">
+@using CleanArchitecture.Application.Common.Interfaces;
+@using CleanArchitecture.Infrastructure.Common
+@using CleanArchitecture.Infrastructure.Identity;
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@using CleanArchitecture.Application.Orders
+@model BaseViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ICurrentUserService CurrentUser
+@inject IOrderService Order
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>آزمایشگاه نانو مواد صبا</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="../img/logo.png" rel="icon">
+    <link href=" ../apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="../css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<section id="topbar" class="topbar d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+        <div class="contact-info d-flex flex-column flex-sm-row align-items-center text-center text-md-start">
+            <div class="d-flex align-items-center ms-sm-4 mb-2 mb-sm-0">
+                <i class="bi bi-phone d-flex align-items-center me-2"></i>
+                <span> ۰۹۱۲۲۱۹۹۲۳۲</span>
+                <span class="d-block">
+                    <span>نانو مواد صبا</span> NMS
+                </span>
+            </div>
+        </div>
+    </div>
+</section><!-- End Top Bar -->
+
+<header id="header" class="header d-flex align-items-center">
+
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+        <a class="navbar-brand" href="#" style="display: flex; align-items: center;">
+            <img src="../img/logo.png" style="display: inline-block;"/>
+            <!-- Visible only on desktop (md and above) -->
+            <h4 class="text-white ms-2 d-none d-md-block">
+                <span class="d-inline">آزمایشگاه</span>
+                <span class="d-inline">نانو مواد صبا</span>
+                <span class="d-inline">.</span>
+            </h4>
+            <!-- Visible only on mobile (less than md) -->
+            <h4 class="text-white ms-2 d-md-none">
+                <span class="d-inline">نانو مواد صبا</span>
+            </h4>
+        </a>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li>
+                    <a href="../Home/#hero">نانو مواد صبا</a>
+                </li>
+                <li>
+                    <a href="../Home/#portfolio">خدمات آنالیز</a>
+                </li>
+                <li>
+                    <a href="../Home/#services">نحوه ی ثبت سفارش</a>
+                </li>
+                <li>
+                    <a href="../Home/#recent-posts">مقالات آنالیز</a>
+                </li>
+                <li>
+                    <a href="../Home/#about">درباره ی ما</a>
+                </li>
+                <li>
+                    <a href="#contact">تماس با ما</a>
+                </li>
+
+            </ul>
+        </nav><!-- .navbar -->
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <button type="button" class="btn btn-outline-light d-flex align-items-center justify-content-center responsive-btn"
+                    onclick="location.href='@Url.Action("SignIn", "Home")'">
+                <i class="bi bi-person icon-mobile"></i>
+                <i class="bi bi-person-sm icon-mobile"></i>
+                <span class="mx-2 d-none d-lg-inline">ورود</span>  <!-- Visible from lg screens and up -->
+                <span class="mx-2 d-inline d-lg-none">ورود</span>  <!-- Visible on screens smaller than lg -->
+            </button>
+        }
+        else
+        {
+            <div class="dropdown d-flex align-items-start justify-content-start ml-auto pull-right">
+                <button class="btn btn-outline-light dropdown-toggle align-items-start justify-content-start ml-auto pull-right" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi-person-fill  mx-2"> </i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <li>
+                        <button class="dropdown-item align-items-start justify-content-start ml-auto pull-right d-flex" type="button"
+                                onclick="window.open('@Url.ActionLink("Index", "Profile", new { })')">
+                            <i class="bi bi-person  mx-2"> </i>
+                            @CurrentUser.FullName
+                        </button>
+                    </li>
+                    @* @if (CurrentUser.UserName is not null && *@
+                    @*      (CurrentUser.UserName.Equals("09124798930") || *@
+                    @*       CurrentUser.UserName.Equals("09129366624") || *@
+                    @*       CurrentUser.UserName.Equals("09215628768") || *@
+                    @*       CurrentUser.UserName.Equals("09108343551"))) *@
+                    @* { *@
+                        <li>
+                            <button class="dropdown-item align-items-start justify-content-start ml-auto pull-right d-flex" type="button"
+                                    onclick="window.open('@Url.ActionLink("Index", "OrderCart", new { })')">
+                                <i class="bi bi-cart3  mx-2"></i>
+                                سبد خرید
+                                @if (Order.InitialExist())
+                                {
+                                    <span class="badge bg-danger mx-2">
+                                        @Order.InitialCount()
+                                    </span>
+                                }
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item align-items-start justify-content-start ml-auto pull-right d-flex" type="button"
+                                    onclick="window.open('@Url.ActionLink("Index", "Order", new { })')">
+                                <i class="bi bi bi-bag-heart  mx-2"></i>
+                                سفارشات
+                            </button>
+                        </li>
+                    @* } *@
+                    <li>
+                        <button class="dropdown-item align-items-start justify-content-start ml-auto pull-right d-flex" type="button"
+                                onclick="window.open('@Url.ActionLink("Logout", "Home", new { })')">
+                            <i class="bi bi-box-arrow-in-right  mx-2"> </i>
+                            خروج از حساب کاربری
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
+</header><!-- End Header -->
+<div>
+    <main role="main" class="pb-3">
+        @RenderBody()
+        @if (@Model?.IsSuccess is false)
+        {
+            <div class="alert alert-danger mx-4 mt-2 col-md-3 d-flex justify-content-start" id="selectCodeNotificationArea" role="alert">
+                <a type="button" onclick="CloseAlert()" class="close mx-4" data-hide="alert">&times;</a>
+                @Model?.Message
+            </div>
+        }
+    </main>
+
+</div>
+<footer id="footer" class="footer">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-5 col-md-12 footer-info">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <title>آزمایشگاه آنالیزی نانو مواد صبا</title>
+                </a>
+                <p>
+                    تلفن :۰۹۱۲۲۱۹۹۲۳۲ - ۶۶۵۱۹۶۶۶ - ۰۲۱ | از شنبه تا پنج شنبه، از ساعت ۰۸:۳۰ تا
+                    تلفن :۰۹۱۲۲۱۹۹۲۳۲ - ۶۶۵۱۹۶۶۶ - ۰۲۱ | از شنبه تا چهار شنبه، از ساعت ۰۸:۳۰ تا
+                    ۱۷:۰۰ پاسخگوی شما هستیم.
+                </p>
+                <div class="social-links d-flex mt-4">
+                    <a href="#" class="twitter">
+                        <i class="bi bi-twitter"></i>
+                    </a>
+                    <a href="#" class="facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="linkedin">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>نانو مواد صبا</h4>
+                <ul>
+                    <li>
+                        <a href="../Home/#hero">نانو مواد صبا</a>
+                    </li>
+                    <li>
+                        <a href="../Home/#portfolio">خدمات آنالیز</a>
+                    </li>
+                    <li>
+                        <a href="../Home/#services">نحوه ی ثبت سفارش</a>
+                    </li>
+                    <li>
+                        <a href="../Home/#recent-posts">مقالات آنالیز</a>
+                    </li>
+                    <li>
+                        <a href="../Home/#about">درباره ی ما</a>
+                    </li>
+                    <li>
+                        <a href="#contact">تماس با ما</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>لینک های مفید</h4>
+                <ul>
+
+                    <li>
+                        <a href="http://www.nano.ir">ستاد ويژه توسعه فناوري نانو</a>
+                    </li>
+                    <li>
+                        <a href="http://labsnet.ir">شبکه آزمایشگاهی فناوری های راهبردی</a>
+                    </li>
+                    <li>
+                        <a href="http://www.fda.gov.ir">سازمان غذا و دارو</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                <h4>تماس با ما</h4>
+                <p>
+                    طرشت، میدان شهید تیموری، <br>
+                    خیابان لطفعلی خانی
+                    انتهای خیابان پارس، <br>
+                    خیابان ذوقی، پلاک 22، واحد 2 <br><br>
+                    <strong>شماره تلفن: </strong>۰۲۱-۶۶۵۱۹۶۶۶<br>
+                    <strong>شماره موبایل: </strong>۹۸-۰۹۱۲۲۱۹۹۲۳۲<br>
+                    <strong>کد پستی: </strong> ۱۴۵۹۸۷۳۱۶۷<br>
+                    <strong> ایمیل: </strong>info.saba.analyze@gmail.com<br>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</footer><!-- End Footer -->
+<!-- End Footer -->
+<!-- </div> -->
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
+
+@* <div id="preloader"></div> *@
+@* *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../vendor/glightbox/js/glightbox.min.js"></script>
+<script src="../vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="../vendor/swiper/swiper-bundle.min.js"></script>
+<script src="../vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="../vendor/php-email-form/validate.js"></script>
+<script src="../js/main.js"></script>
+<script type="text/javascript">
+
+    function CloseAlert() {
+        console.log("salam");
+        document.getElementById('selectCodeNotificationArea').style.display = 'none';
+    }
+
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 4000);
+
+</script>
+
+</body>
+
+</html>
