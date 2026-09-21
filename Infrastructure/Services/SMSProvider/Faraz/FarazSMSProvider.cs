@@ -49,9 +49,6 @@ namespace CleanArchitecture.Infrastructure.Services.SMSProvider.Faraz
                 AccessTokenFaraz = apiResult.Data;
 
         }
-
-
-
     }
 }
 
