@@ -1,0 +1,79 @@
+
+@namespace CleanArchitecture.Application.PagesDto
+@using CleanArchitecture.Infrastructure.Identity
+@using CleanArchitecture.Application.Common.Interfaces
+@model IndexDto
+@inject IIdentityService IdentityService
+
+@{
+    ViewData["Title"] = "مقالات";
+}
+@{
+    ViewData["Title"] = "مقالات";
+}
+
+<section id="recent-posts" class="recent-posts sections-bg">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>مقالات</h2>
+
+            <p>
+                بخش مقالات، محلی است که مطالبی در زمینه شیمی و علوم مرتبط با آن به صورت مقاله منتشر می‌شود. این بخش می‌تواند برای افزایش دانش و آگاهی عمومی در زمینه شیمی، همچنین بهبود روند تحقیقات و توسعه در این حوزه مفید باشد.
+            </p>
+        </div>
+
+        <div class="row gy-4">
+
+            @if (Model?.Articles is { Count: > 0 })
+            {
+                @foreach (var item in Model.Articles)
+                {
+                    <div class="col-xl-4 col-md-6">
+                        <article>
+
+                            <div class="post-img d-flex justify-content-center">
+                                <img src="@item.ImageUrl"
+                                     class="img-fluid rounded-4"
+                                     alt="" />
+                            </div>
+
+                            <p class="post-category">
+                                @item.CategoryTitle
+                            </p>
+
+                            <h2 class="title">
+                                @Html.ActionLink(
+                                    item.Name,
+                                    "ArticleById",
+                                    "Article",
+                                    new { myParams = item.Id },
+                                    null
+                                )
+                            </h2>
+
+                            <div class="d-flex align-items-center">
+                                <div class="post-meta">
+
+                                    <p class="post-author">
+                                        @IdentityService.GetFullName(
+                                            Convert.ToInt64(item.CreatedBy)
+                                        )
+                                    </p>
+
+                                    <p class="post-date">
+                                        <time>@item.Created</time>
+                                    </p>
+
+                                </div>
+                            </div>
+
+                        </article>
+                    </div>
+                }
+            }
+
+        </div>
+
+    </div>
+</section>

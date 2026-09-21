@@ -1,0 +1,256 @@
+@{
+    ViewData["Title"] = "خدمات آنالیز";
+}
+
+<h1>خدمات آنالیز</h1>
+
+<section id="portfolio" class="portfolio sections-bg">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-header">
+                    <h2>خدمات آنالیز</h2>
+                    <p>
+                        آزمایشگاه تحقیقاتی شناسایی نانو مواد صبا با کادری مجرب از کارشناسان و مهندسین حوزه آنالیز و نانوتکنولوژی، آماده ی ارائه
+                        خدمات آنالیزی اعم از سنجش سطح مواد متخلخل( آنالیز BET) و آنالیز شناسایی ترکیبات آلی به کمک آنالیز FTIR و آنالیز GC-MS
+                        و همچنین آنالیز های مواد معدنی چون آنالیز ICP-MS، آنالیز ICP-OES، آنالیز XRF، آنالیز XRD و تعیین غلظت فلزات گرانبها به
+                        کمک Fire Assay به جامعه علمی کشور، دانشگاه ها، کارخانجات، شرکت های دانش بنیان و شرکت های اکتشاف و استخراج
+                        معادن می باشد. همچنین این آزمایشگاه یکی از آزمایشگاه های فعال در حوزه شناسایی مواد مجهول، مشکوک، افزودنی ها، رنگ
+                        ،پلیمرها ، پوشش وعمده ی مواد تجاری شیمیایی وترکیبات مخلوط مورد استفاده در کارگاه ها و کارخانجات تولیدی و مهندسی
+                        معکوس به وسیله آنالیز FTIR و جستجوی کتابخانه ای مواد تحت آنالیز به کمک Bio Radو KnowITAll است.
+                    </p>
+                    <a class="mx-5 fw-bold fs-4 d-inline-block mt-3" href="http://www.nanomavadsaba.com/files/AnalyzePrice.pdf" target="_blank">
+                        هزینه های آنالیز
+                    </a>
+                </div>
+
+                <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order" data-aos="fade-up" data-aos-delay="100">
+                   
+                    <div>
+                        <ul class="portfolio-flters">
+                            <li data-filter="*" class="filter-active">همه</li>
+                            <li data-filter=".filter-app">آنالیز عنصری</li>
+                            <li data-filter=".filter-product"> آنالیز تصویر برداری</li>
+                            <li data-filter=".filter-books">آنالیز حرارتی</li>
+                            <li data-filter=".filter-kar">کروماتوگرافی</li>
+                            <li data-filter=".filter-spectro">آنالیز اسپکتروسکوپی</li>
+                            <li data-filter=".filter-sathevije">آنالیز سطح ویژه</li>
+                            <li data-filter=".filter-sathsanji">آنالیز سطح سنجی</li>
+                        </ul><!-- End Portfolio Filters -->
+                    </div>
+
+                    <div class="row gy-4 portfolio-container">
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-app">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink( "DeviceById", "Device", new { myParams = "XRF" }, null)"><img src="../img/XRF.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز XRF", "DeviceById", "Device", new { myParams = "XRF" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/XRF.pdf" target="_blank">دانلود فرم آنالیز</a>
+                                    @*<p>۳۲۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-spectro">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "XRD" }, null)"><img src="../img/XRD.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز XRD", "DeviceById", "Device", new { myParams = "XRD" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/XRD.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۳۲۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-app">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "ICP-MS" }, null)"><img src="../img/ICP-MS.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز ICP-MS", "DeviceById", "Device", new { myParams = "ICP-MS" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/ICP.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۴۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-app">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "ICP-OES" }, null)"><img src="../img/ICP-OES.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز ICP-OES", "DeviceById", "Device", new { myParams = "ICP-OES" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/ICP.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۲۳۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-product">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById","Device", new { myParams = "TEM" }, null)"><img src="../img/TEM.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز TEM", "DeviceById", "Device", new { myParams = "TEM" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/TEM.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۳۵۰۰۰۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-product">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "SEM" }, null)"><img src="../img/SEM.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز SEM", "DeviceById", "Device", new { myParams = "SEM" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/SEM.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۳۰۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-app">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "EDX" }, null)"><img src="../img/EDX.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز EDX", "DeviceById", "Device", new { myParams = "EDX" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/EDX_Mapping.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+                        @* <div class="col-xl-4 col-md-6 portfolio-item filter-books">
+            <div class="portfolio-wrap">
+            <a href="../img/TGA.jpeg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="../img/TGA.jpeg" class="img-fluid" alt=""></a>
+            <div class="portfolio-info">
+            <h4><a href="portfolio-details.html" title="More Details">آنالیز TGA</a></h4>
+            <p>دقیقه ای ۱۰ هزار تومان / حداقل هزینه ۳ میلیون تومان</p>
+            </div>
+            </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-xl-4 col-md-6 portfolio-item filter-spectro">
+            <div class="portfolio-wrap">
+            <a href="../img/raman.jpeg" data-gallery="portfolio-gallery-app" class="glightbox"><img src="../img/raman.jpeg" class="img-fluid" alt=""></a>
+            <div class="portfolio-info">
+            <h4><a href="portfolio-details.html" title="More Details">انالیز RAMAN</a></h4>
+            <p>۱۸۰ هزار تومان</p>
+            </div>
+            </div>
+            </div><!-- End Portfolio Item -->*@
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-spectro">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "FTIR" }, null)"><img src="../img/FTIR.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4>  @Html.ActionLink("آنالیز FTIR", "DeviceById", "Device", new { myParams = "FTIR" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/FTIR.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۸۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-sathevije">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "BET" }, null)"><img src="../img/BET.png" class="img-fluid" alt=""></a>
+                                    <div class="portfolio-info">
+                                    @* <a class="mx-5" href="@Url.ActionLink("Index", "FTIR")" target="_blank">ثبت سفارش</a> *@
+                                    <h4> @Html.ActionLink("آنالیز BET", "DeviceById", "Device", new { myParams = "BET" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/BET.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۳۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-spectro">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "UV-Vis" }, null)"><img src="../img/UV-VIS.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز UV-Vis", "DeviceById", "Device", new { myParams = "UV-Vis" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/UV-Vis.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۲۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-kar">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "GC-MS" }, null)"><img src="../img/GC-MS.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز GC-MS", "DeviceById", "Device", new { myParams = "GC-MS" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/GC-MS.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۶۰۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-sathsanji">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "ContactAngle" }, null)"><img src="../img/ContactAngle.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز ContactAngle", "DeviceById", "Device", new { myParams = "ContactAngle" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/Contact angle.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-product">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "Mapping" }, null)"><img src="../img/Mapping.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز Mapping", "DeviceById", "Device", new { myParams = "Mapping" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/EDX_Mapping.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۸۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-app">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "AAS" }, null)"><img src="../img/AAS.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز AAS", "DeviceById", "Device", new { myParams = "AAS" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/AAS.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-sathsanji">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "AFM" }, null)"><img src="../img/AFM.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز AFM", "DeviceById", "Device", new { myParams = "AFM" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/AFM.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-books">
+                            <div class="portfolio-wrap">
+                                <a href="@Url.ActionLink("DeviceById", "Device", new { myParams = "TGA" }, null)"><img src="../img/TA.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز TGA", "DeviceById", "Device", new { myParams = "TGA" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/TGA-DSC.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @*<p>۱۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+                        <div class="col-xl-4 col-md-6 portfolio-item filter-app">
+                            <div class="portfolio-wrap">
+                                <a href=" @Url.ActionLink("DeviceById", "Device", new { myParams = "FireAssay" }, null)"><img src="../img/FireAssay.png" class="img-fluid" alt=""></a>
+                                <div class="portfolio-info">
+                                    <h4> @Html.ActionLink("آنالیز FireAssay", "DeviceById", "Device", new { myParams = "FireAssay" }, null)</h4>
+                                    <a class="mx-5" href="http://www.nanomavadsaba.com/files/FireAssay.pdf" target="_blank" class="stretched-link">دانلود فرم آنالیز</a>
+                                    @* <p>۳۵۰ هزار تومان</p>*@
+                                </div>
+                            </div>
+                        </div><!-- End Portfolio Item -->
+
+
+                    </div><!-- End Portfolio Container -->
+
+                </div>
+
+            </div>
+        </section><!-- End Portfolio Section -->
