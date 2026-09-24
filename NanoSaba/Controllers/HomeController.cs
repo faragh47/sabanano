@@ -56,7 +56,7 @@ public class HomeController : Controller
         _userManager = userManager;
     }
 
-    [AllowAnonypublic async Taskmous]
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         var result = await _mediator.Send(new GetArticleWithPaginationQuery()
@@ -72,9 +72,20 @@ public class HomeController : Controller
     }
 
     [AllowAnonymous]
-    {public IActionResult SignIn()
-
+    public IActionResult SignIn()
+    {
        return View();
+    }
+
+    [AllowAnonymous]
+    public IActionResult About()
+    {
+    return View();
+    }
+    [AllowAnonymous]
+    public IActionResult Contact()
+    {
+    return View();
     }
 
     [AllowAnonymous]
@@ -164,7 +175,7 @@ public class HomeController : Controller
 
     [HttpPost]
     [AllowAnonymous]
-    <IActionResult> SignInWithCode()
+    public async Task<IActionResult> SignInWithCode()
     {
         var number1 = Request.Form["number1"].ToString();
         var mobile = TempData["MobileNumber"];
