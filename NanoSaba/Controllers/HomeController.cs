@@ -74,7 +74,18 @@ public class HomeController : Controller
     [AllowAnonymous]
     public IActionResult SignIn()
     {
-        return View();
+       return View();
+    }
+
+    [AllowAnonymous]
+    public IActionResult About()
+    {
+    return View();
+    }
+    [AllowAnonymous]
+    public IActionResult Contact()
+    {
+    return View();
     }
 
     [AllowAnonymous]
