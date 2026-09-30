@@ -11,6 +11,7 @@
     --nms-page: #f6f9fc;
     --nms-radius: 40px;
     --nms-header-h: 62px;
+    --nms-stick-offset: 24px;
 }
 
 html body {
@@ -79,7 +80,8 @@ html body {
 --------------------------------------------------------------*/
 .nms-header {
     position: sticky;
-    top: 0;
+    /* Stick with 24px of the top padding scrolled away, so the header never changes height */
+    top: calc(-1 * var(--nms-stick-offset));
     z-index: 997;
     padding-top: 32px;
     background: var(--nms-page);
@@ -95,7 +97,6 @@ html body {
 
 /* main.js toggles .sticked on scroll; the header is already sticky, so skip its offset */
 .nms-header.sticked {
-    padding: 8px 0;
     box-shadow: 0 2px 20px rgba(3, 13, 31, .08);
 }
 
@@ -245,6 +246,7 @@ html body {
 @media (max-width: 575px) {
     :root {
         --nms-header-h: 54px;
+        --nms-stick-offset: 4px;
         --nms-radius: 24px;
     }
 
@@ -281,6 +283,7 @@ html body {
 --------------------------------------------------------------*/
 .nms-hero {
     padding: 0 0 40px;
+    scroll-margin-top: 200px; /* #hero links land at the very top of the page */
 }
 
 .nms-hero__card {

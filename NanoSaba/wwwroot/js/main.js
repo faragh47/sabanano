@@ -23,11 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const selectHeader = document.querySelector('#header');
   if (selectHeader) {
-    let headerOffset = selectHeader.offsetTop;
     let nextElement = selectHeader.nextElementSibling;
 
     const headerFixed = () => {
-      if (window.scrollY > headerOffset) {
+      // The header is position: sticky, so this only switches its look (shadow, rounded tab).
+      // Wait until it has actually stuck: --nms-stick-offset in nms-home.css.
+      const stickOffset = parseFloat(getComputedStyle(selectHeader).getPropertyValue('--nms-stick-offset')) || 0;
+      if (window.scrollY > stickOffset) {
         selectHeader.classList.add('sticked');
         if (nextElement) nextElement.classList.add('sticked-header-offset');
       } else {
