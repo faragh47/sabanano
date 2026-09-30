@@ -1,0 +1,505 @@
+/*--------------------------------------------------------------
+# NMS redesign: header, hero and feature strip
+--------------------------------------------------------------*/
+:root {
+    --nms-navy: #030d1f;
+    --nms-navy-2: #0a2346;
+    --nms-cyan: #12b4ef;
+    --nms-cyan-dark: #0a9fd8;
+    --nms-ink: #0f172a;
+    --nms-muted: #5b6475;
+    --nms-page: #f6f9fc;
+    --nms-radius: 40px;
+    --nms-header-h: 62px;
+    --nms-stick-offset: 24px;
+}
+
+html body {
+    background: var(--nms-page);
+}
+
+.nms-header .container-xl,
+.nms-hero .container-xl {
+    max-width: 1360px;
+}
+
+/* Buttons */
+.btn.nms-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 38px;
+    padding: 0 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color .2s, color .2s, border-color .2s;
+}
+
+.btn.nms-btn--lg {
+    height: 44px;
+    padding: 0 24px;
+    font-size: 16px;
+}
+
+.btn.nms-btn--primary,
+.btn.nms-btn--primary:focus {
+    background: var(--nms-cyan);
+    border: 1px solid var(--nms-cyan);
+    color: #fff;
+}
+
+.btn.nms-btn--primary:hover {
+    background: var(--nms-cyan-dark);
+    border-color: var(--nms-cyan-dark);
+    color: #fff;
+}
+
+.btn.nms-btn--outline,
+.btn.nms-btn--outline:focus {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .85);
+    color: #fff;
+}
+
+.btn.nms-btn--outline:hover,
+.btn.nms-btn--outline.show {
+    background: #fff;
+    border-color: #fff;
+    color: var(--nms-navy);
+}
+
+.btn.nms-btn .bi-arrow-left {
+    font-size: 18px;
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+.nms-header {
+    position: sticky;
+    /* Stick with 24px of the top padding scrolled away, so the header never changes height */
+    top: calc(-1 * var(--nms-stick-offset));
+    z-index: 997;
+    padding-top: 32px;
+    background: var(--nms-page);
+    transition: box-shadow .3s;
+}
+
+.nms-header__inner {
+    display: flex;
+    align-items: center;
+    height: var(--nms-header-h);
+    gap: 24px;
+}
+
+/* main.js toggles .sticked on scroll; the header is already sticky, so skip its offset */
+.nms-header.sticked {
+    box-shadow: 0 2px 20px rgba(3, 13, 31, .08);
+}
+
+.nms-header.sticked + .sticked-header-offset {
+    margin-top: 0;
+}
+
+/* Dark tab holding the buttons (right side in RTL) */
+.nms-header__actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 100%;
+    padding: 0 28px 0 22px;
+    background: var(--nms-navy);
+    border-radius: 32px;
+    flex-shrink: 0;
+}
+
+/* On the home page the tab melts into the hero card below it */
+.nms-header--home:not(.sticked) .nms-header__actions {
+    border-radius: 32px 32px 0 0;
+}
+
+.nms-header--home:not(.sticked) .nms-header__actions::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -32px;
+    width: 32px;
+    height: 32px;
+    background: radial-gradient(circle at 0 0, transparent 31.5px, var(--nms-navy) 32px);
+}
+
+.nms-header__search {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    color: #fff;
+    font-size: 19px;
+}
+
+.nms-header__search:hover {
+    color: var(--nms-cyan);
+}
+
+.nms-header__actions .dropdown-toggle {
+    gap: 6px;
+}
+
+.nms-header__actions .dropdown-menu {
+    text-align: right;
+}
+
+/* Nav links */
+.nms-header .nms-nav {
+    flex: 1;
+    justify-content: center;
+}
+
+/* Brand (left side in RTL) */
+.nms-brand {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 10px;
+    margin-left: 22px;
+    color: var(--nms-ink);
+    flex-shrink: 0;
+}
+
+.nms-brand:hover {
+    color: var(--nms-ink);
+}
+
+.nms-brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.nms-brand__name {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+.nms-brand__sub {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+@media (min-width: 1280px) {
+    .nms-header .nms-nav > ul {
+        gap: 30px;
+    }
+
+    .nms-header .nms-nav > ul > li {
+        padding: 10px 0;
+    }
+
+    .nms-header .nms-nav a,
+    .nms-header .nms-nav a:focus {
+        color: var(--nms-ink);
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .nms-header .nms-nav a:hover,
+    .nms-header .nms-nav .active,
+    .nms-header .nms-nav .active:focus,
+    .nms-header .nms-nav li:hover > a {
+        color: var(--nms-cyan-dark);
+    }
+
+    .nms-header .nms-nav > ul > li > a:before {
+        background-color: var(--nms-cyan);
+    }
+}
+
+@media (max-width: 1279px) {
+    .nms-header .mobile-nav-show {
+        order: 10;
+        color: var(--nms-ink);
+        margin: 0;
+    }
+
+    .nms-brand {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .nms-header .nms-nav ul {
+        background: rgba(3, 13, 31, .96);
+    }
+
+    .nms-header .nms-nav a,
+    .nms-header .nms-nav a:focus {
+        color: rgba(255, 255, 255, .8);
+    }
+}
+
+@media (max-width: 575px) {
+    :root {
+        --nms-header-h: 54px;
+        --nms-stick-offset: 4px;
+        --nms-radius: 24px;
+    }
+
+    .nms-header {
+        padding-top: 12px;
+    }
+
+    .nms-header__inner {
+        gap: 12px;
+    }
+
+    .nms-header__actions {
+        padding: 0 12px;
+        gap: 8px;
+    }
+
+    .nms-header__actions > .nms-btn--primary,
+    .nms-header__search {
+        display: none;
+    }
+
+    .nms-brand img {
+        width: 36px;
+        height: auto;
+    }
+
+    .nms-brand__name {
+        font-size: 20px;
+    }
+}
+
+/*--------------------------------------------------------------
+# Hero
+--------------------------------------------------------------*/
+.nms-hero {
+    padding: 0 0 40px;
+    scroll-margin-top: 200px; /* #hero links land at the very top of the page */
+}
+
+.nms-hero__card {
+    position: relative;
+    overflow: hidden;
+    min-height: 452px;
+    display: flex;
+    align-items: center;
+    background: var(--nms-navy);
+    border-radius: var(--nms-radius);
+    border-top-right-radius: 0;
+    isolation: isolate;
+}
+
+.nms-hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+    z-index: -2;
+}
+
+/* Keep the text side dark enough to read */
+.nms-hero__card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to right, rgba(3, 13, 31, .92) 0%, rgba(3, 13, 31, .55) 30%, rgba(3, 13, 31, 0) 55%);
+}
+
+/* Text column sits on the left of the card, as in the design */
+.nms-hero__content {
+    width: min(100%, 470px);
+    margin-right: auto;
+    padding: 48px 30px 90px;
+    color: #fff;
+    text-align: left;
+}
+
+.nms-hero__eyebrow {
+    margin: 0 0 12px;
+    color: var(--nms-cyan);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .6px;
+    text-align: left;
+}
+
+.nms-hero__title {
+    margin: 0 0 20px;
+    color: #fff;
+    font-family: iranyekan !important;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.nms-hero__title span {
+    display: block;
+    color: var(--nms-cyan);
+}
+
+.nms-hero__lead {
+    margin: 0 0 32px;
+    color: rgba(255, 255, 255, .92);
+    font-size: 16px;
+    line-height: 1.85;
+}
+
+.nms-hero__buttons {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+/* Feature strip overlapping the bottom of the card */
+.nms-features {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    justify-content: space-between;
+    gap: 12px;
+    margin: -30px 34px 0;
+    padding: 40px 24px;
+    list-style: none;
+    background: #f9fafb;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(3, 13, 31, .04);
+}
+
+.nms-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nms-feature__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #e8f2fb;
+    color: var(--nms-ink);
+    font-size: 30px;
+}
+
+.nms-feature__text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nms-feature__text strong {
+    color: var(--nms-ink);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.nms-feature__text small {
+    color: var(--nms-muted);
+    font-size: 13px;
+}
+
+@media (max-width: 1199px) {
+    .nms-features {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 28px;
+    }
+}
+
+@media (max-width: 991px) {
+    .nms-hero__card {
+        min-height: 520px;
+        align-items: flex-end;
+    }
+
+    .nms-hero__bg {
+        object-position: 70% center;
+    }
+
+    .nms-hero__card::before {
+        background: linear-gradient(to top, rgba(3, 13, 31, .95) 0%, rgba(3, 13, 31, .7) 45%, rgba(3, 13, 31, .1) 100%);
+    }
+
+    .nms-hero__content {
+        width: 100%;
+        margin: 0;
+        padding: 160px 28px 70px;
+    }
+
+    .nms-hero__content,
+    .nms-hero__eyebrow {
+        text-align: right;
+    }
+
+    .nms-hero__buttons {
+        flex-direction: row;
+    }
+
+    .nms-features {
+        grid-template-columns: repeat(2, 1fr);
+        margin: -30px 16px 0;
+    }
+}
+
+@media (max-width: 575px) {
+    .nms-hero .container-xl {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .nms-hero__card {
+        min-height: 480px;
+    }
+
+    .nms-hero__content {
+        padding: 140px 20px 60px;
+    }
+
+    .nms-hero__eyebrow {
+        font-size: 11px;
+        letter-spacing: .3px;
+    }
+
+    .nms-hero__title {
+        font-size: 30px;
+    }
+
+    .nms-hero__lead {
+        font-size: 14px;
+    }
+
+    .nms-hero__buttons .nms-btn {
+        flex: 1;
+        padding: 0 12px;
+    }
+
+    .nms-features {
+        grid-template-columns: 1fr;
+        margin: -24px 8px 0;
+        padding: 28px 20px;
+        row-gap: 20px;
+    }
+
+    .nms-feature__icon {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+}

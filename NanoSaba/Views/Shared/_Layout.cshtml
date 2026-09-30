@@ -23,85 +23,31 @@
     <link href="../vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="../vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <link href="../css/main.css" rel="stylesheet">
+    <link href="~/css/nms-home.css" rel="stylesheet" asp-append-version="true">
 </head>
 
 <body>
 
 <!-- ======= Header ======= -->
-<section id="topbar" class="topbar d-flex align-items-center">
-    <div class="container d-flex justify-content-center justify-content-md-between">
-        <div class="contact-info d-flex flex-column flex-sm-row align-items-center text-center text-md-start">
-            <div class="d-flex align-items-center ms-sm-4 mb-2 mb-sm-0">
-                <i class="bi bi-phone d-flex align-items-center me-2"></i>
-                <span> ۰۹۱۲۲۱۹۹۲۳۲</span>
-                <span class="d-block">
-                    <span>نانو مواد صبا</span> NMS
-                </span>
-            </div>
-        </div>
-    </div>
-</section><!-- End Top Bar -->
-
-<header id="header" class="header d-flex align-items-center">
-
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-        <a class="navbar-brand" href="#" style="display: flex; align-items: center;">
-            <img src="../img/logo.png" style="display: inline-block;"/>
-            <!-- Visible only on desktop (md and above) -->
-            <h4 class="text-white ms-2 d-none d-md-block">
-                <span class="d-inline">آزمایشگاه</span>
-                <span class="d-inline">نانو مواد صبا</span>
-                <span class="d-inline">.</span>
-            </h4>
-            <!-- Visible only on mobile (less than md) -->
-            <h4 class="text-white ms-2 d-md-none">
-                <span class="d-inline">نانو مواد صبا</span>
-            </h4>
-        </a>
-        <nav id="navbar" class="navbar">
-            <ul>
-                <li>
-                    <a href="../Home/#hero">نانو مواد صبا</a>
-                </li>
-                <li>
-                    <a asp-controller="Analysis" asp-action="Index">خدمات آنالیز</a>
-                </li>
-                <li>
-                    <a asp-controller="OrderGuide" asp-action="Index">نحوه ی ثبت سفارش</a>
-                </li>
-                <li>
-                    <a asp-controller="Articles" asp-action="Index">مقالات آنالیز</a>
-                </li>
-                <li>
-                    <a asp-controller="Home" asp-action="About">درباره ی ما</a>
-                </li>
-                <li>
-                    <a asp-controller="Home" asp-action="Contact">تماس با ما</a>
-                </li>
-
-            </ul>
-        </nav><!-- .navbar -->
-
-        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-
-        @if (!SignInManager.IsSignedIn(User))
-        {
-            <button type="button" class="btn btn-outline-light d-flex align-items-center justify-content-center responsive-btn"
-                    onclick="location.href='@Url.Action("SignIn", "Home")'">
-                <i class="bi bi-person icon-mobile"></i>
-                <i class="bi bi-person-sm icon-mobile"></i>
-                <span class="mx-2 d-none d-lg-inline">ورود</span>  <!-- Visible from lg screens and up -->
-                <span class="mx-2 d-inline d-lg-none">ورود</span>  <!-- Visible on screens smaller than lg -->
-            </button>
-        }
-        else
-        {
-            <div class="dropdown d-flex align-items-start justify-content-start ml-auto pull-right">
-                <button class="btn btn-outline-light dropdown-toggle align-items-start justify-content-start ml-auto pull-right" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi-person-fill  mx-2"> </i>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+<header id="header" class="nms-header@(ViewData["HomeHero"] is true ? " nms-header--home" : "")">
+    <div class="container-xl nms-header__inner">
+        <div class="nms-header__actions">
+            <a class="btn nms-btn nms-btn--primary" asp-controller="Analysis" asp-action="Index">ثبت سفارش</a>
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <a class="btn nms-btn nms-btn--outline" href="@Url.Action("SignIn", "Home")">ورود</a>
+            }
+            else
+            {
+                <div class="dropdown">
+                    <button class="btn nms-btn nms-btn--outline dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-fill"></i>
+                        @if (Order.InitialExist())
+                        {
+                            <span class="badge bg-danger">@Order.InitialCount()</span>
+                        }
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownMenu2">
                     <li>
                         <button class="dropdown-item align-items-start justify-content-start ml-auto pull-right d-flex" type="button"
                                 onclick="window.open('@Url.ActionLink("Index", "Profile", new { })')">
@@ -144,8 +90,33 @@
                         </button>
                     </li>
                 </ul>
-            </div>
-        }
+                </div>
+            }
+            <a class="nms-header__search" asp-controller="Analysis" asp-action="Index" aria-label="جستجوی خدمات آنالیز">
+                <i class="bi bi-search"></i>
+            </a>
+        </div>
+
+        <nav id="navbar" class="navbar nms-nav">
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">صفحه اصلی</a></li>
+                <li><a asp-controller="Analysis" asp-action="Index">خدمات آنالیز</a></li>
+                <li><a asp-controller="Articles" asp-action="Index">مقالات</a></li>
+                <li><a asp-controller="Home" asp-action="About">درباره ما</a></li>
+                <li><a asp-controller="Home" asp-action="Contact">تماس با ما</a></li>
+            </ul>
+        </nav><!-- .navbar -->
+
+        <a class="nms-brand" asp-controller="Home" asp-action="Index">
+            <img src="../img/nms-logo.svg" alt="" width="46" height="52"/>
+            <span class="nms-brand__text">
+                <span class="nms-brand__name">NMS</span>
+                <span class="nms-brand__sub">نانو مواد صبا</span>
+            </span>
+        </a>
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
     </div>
 </header><!-- End Header -->
 <div>
@@ -161,86 +132,128 @@
     </main>
 
 </div>
+
 <footer id="footer" class="footer">
 
     <div class="container">
         <div class="row gy-4">
+
+            <!-- Company -->
             <div class="col-lg-5 col-md-12 footer-info">
-                <a href="index.html" class="logo d-flex align-items-center">
-                    <title>آزمایشگاه آنالیزی نانو مواد صبا</title>
+
+                <a href="@Url.Action("Index", "Home")"
+                   class="logo d-flex align-items-center">
+                    <span>آزمایشگاه آنالیزی نانو مواد صبا</span>
                 </a>
+
                 <p>
-                    تلفن :۰۹۱۲۲۱۹۹۲۳۲ - ۶۶۵۱۹۶۶۶ - ۰۲۱ | از شنبه تا پنج شنبه، از ساعت ۰۸:۳۰ تا
-                    تلفن :۰۹۱۲۲۱۹۹۲۳۲ - ۶۶۵۱۹۶۶۶ - ۰۲۱ | از شنبه تا چهار شنبه، از ساعت ۰۸:۳۰ تا
-                    ۱۷:۰۰ پاسخگوی شما هستیم.
+                    تلفن: ۰۲۱-۶۶۵۱۹۶۶۶ - ۰۹۱۲۲۱۹۹۲۳۲<br>
+                    از شنبه تا چهارشنبه، از ساعت ۰۸:۳۰ تا ۱۷:۰۰ پاسخگوی شما هستیم.
                 </p>
+
                 <div class="social-links d-flex mt-4">
+
                     <a href="#" class="twitter">
                         <i class="bi bi-twitter"></i>
                     </a>
+
                     <a href="#" class="facebook">
                         <i class="bi bi-facebook"></i>
                     </a>
+
                     <a href="#" class="instagram">
                         <i class="bi bi-instagram"></i>
                     </a>
+
                     <a href="#" class="linkedin">
                         <i class="bi bi-linkedin"></i>
                     </a>
+
                 </div>
+
             </div>
 
+            <!-- Navigation -->
             <div class="col-lg-2 col-6 footer-links">
-                <h4>نانو مواد صبا</h4>
-                <ul>
+              <h4>نانو مواد صبا</h4>
+
+              <ul>
+                   <li>
+                      <a href="../Home/#hero">نانو مواد صبا</a>
+                   </li>
+
                     <li>
-                        <a href="../Home/#hero">نانو مواد صبا</a>
+                        <a asp-controller="Analysis" asp-action="Index">
+                خدمات آنالیز
+                        </a>
                     </li>
+
                     <li>
-                        <a href="../Home/#portfolio">خدمات آنالیز</a>
+                        <a asp-controller="OrderGuide" asp-action="Index">
+                نحوه ی ثبت سفارش
+                        </a>
                     </li>
+
                     <li>
-                        <a href="../Home/#services">نحوه ی ثبت سفارش</a>
+                        <a asp-controller="Articles" asp-action="Index">
+                مقالات آنالیز
+                        </a>
                     </li>
+
                     <li>
-                        <a href="../Home/#recent-posts">مقالات آنالیز</a>
+                        <a asp-controller="Home" asp-action="About">
+                درباره ی ما
+                        </a>
                     </li>
+
                     <li>
-                        <a href="../Home/#about">درباره ی ما</a>
-                    </li>
-                    <li>
-                        <a href="#contact">تماس با ما</a>
+                        <a asp-controller="Home" asp-action="Contact">
+                تماس با ما
+                        </a>
                     </li>
                 </ul>
             </div>
 
+            <!-- Useful Links -->
             <div class="col-lg-2 col-6 footer-links">
+
                 <h4>لینک های مفید</h4>
-                <ul>
 
+                <ul>
                     <li>
-                        <a href="http://www.nano.ir">ستاد ويژه توسعه فناوري نانو</a>
+                        <a href="https://nano.ir" target="_blank" rel="noopener noreferrer">
+                            ستاد ویژه توسعه فناوری نانو
+                        </a>
                     </li>
                     <li>
-                        <a href="http://labsnet.ir">شبکه آزمایشگاهی فناوری های راهبردی</a>
+                        <a href="https://labsnet.ir" target="_blank" rel="noopener noreferrer">
+                            شبکه آزمایشگاهی فناوری های راهبردی
+                        </a>
                     </li>
                     <li>
-                        <a href="http://www.fda.gov.ir">سازمان غذا و دارو</a>
+                        <a href="https://www.fda.gov.ir" target="_blank" rel="noopener noreferrer">
+                            سازمان غذا و دارو
+                        </a>
                     </li>
                 </ul>
+
             </div>
 
+            <!-- Contact -->
             <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+
                 <h4>تماس با ما</h4>
+
                 <p>
                     طرشت، میدان شهید تیموری، <br>
-                    خیابان لطفعلی خانی
+                    خیابان لطفعلی خانی، <br>
                     انتهای خیابان پارس، <br>
-                    خیابان ذوقی، پلاک 22، واحد 2 <br><br>
-                    <strong>شماره تلفن: </strong>۰۲۱-۶۶۵۱۹۶۶۶<br>
-                    <strong>شماره موبایل: </strong>۹۸-۰۹۱۲۲۱۹۹۲۳۲<br>
-                    <strong>کد پستی: </strong> ۱۴۵۹۸۷۳۱۶۷<br>
-                    <strong> ایمیل: </strong>info.saba.analyze@gmail.com<br>
+                    خیابان ذوقی، پلاک ۲۲، واحد ۲ <br><br>
+
+                    <strong>شماره تلفن:</strong> ۰۲۱-۶۶۵۱۹۶۶۶<br>
+                    <strong>شماره موبایل:</strong> ۰۹۱۲۲۱۹۹۲۳۲<br>
+                    <strong>کد پستی:</strong> ۱۴۵۹۸۷۳۱۶۷<br>
+                    <strong>ایمیل:</strong> info.saba.analyze@gmail.com
                 </p>
 
             </div>
@@ -248,8 +261,7 @@
         </div>
     </div>
 
-
-</footer><!-- End Footer -->
+</footer>
 <!-- End Footer -->
 <!-- </div> -->
 
@@ -266,7 +278,7 @@
 <script src="../vendor/swiper/swiper-bundle.min.js"></script>
 <script src="../vendor/isotope-layout/isotope.pkgd.min.js"></script>
 <script src="../vendor/php-email-form/validate.js"></script>
-<script src="../js/main.js"></script>
+<script src="~/js/main.js" asp-append-version="true"></script>
 <script type="text/javascript">
 
     function CloseAlert() {
