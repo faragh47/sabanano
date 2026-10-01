@@ -31,18 +31,6 @@
     margin: 0 auto 16px;
 }
 
-.nms-analysis__price {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
-    color: var(--nms-cyan);
-}
-
-.nms-analysis__price:hover {
-    color: var(--nms-cyan-dark);
-}
-
 /* Cards grid: 6 per row on wide screens, fewer on smaller ones */
 .nms-analysis__grid {
     display: grid;
