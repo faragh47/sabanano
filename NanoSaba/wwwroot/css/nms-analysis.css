@@ -1,0 +1,182 @@
+/*--------------------------------------------------------------
+# NMS redesign: analysis services page (Analysis/Index)
+# Colors come from the variables in nms-home.css
+--------------------------------------------------------------*/
+.nms-analysis {
+    padding: 56px 0 80px;
+}
+
+.nms-analysis .container-xl {
+    max-width: 1360px;
+}
+
+/* Title + intro text */
+.nms-analysis__intro {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.nms-analysis__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--nms-ink);
+    margin-bottom: 20px;
+}
+
+.nms-analysis__text {
+    font-size: 17px;
+    line-height: 2;
+    color: var(--nms-ink);
+    text-align: justify;
+    margin: 0 auto 16px;
+}
+
+/* Cards grid: 6 per row on wide screens, fewer on smaller ones */
+.nms-analysis__grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 20px;
+}
+
+@media (max-width: 1199.98px) {
+    .nms-analysis__grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991.98px) {
+    .nms-analysis__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .nms-analysis {
+        padding: 32px 0 56px;
+    }
+
+    .nms-analysis__title {
+        font-size: 24px;
+    }
+
+    .nms-analysis__text {
+        font-size: 15px;
+    }
+
+    .nms-analysis__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+}
+
+/* One service card */
+.nms-service-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #dfe3ea;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: box-shadow .2s, transform .2s;
+}
+
+.nms-service-card:hover {
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .08);
+    transform: translateY(-2px);
+}
+
+.nms-service-card__media {
+    display: block;
+    aspect-ratio: 16 / 9.5;
+    overflow: hidden;
+    background: #fff;
+}
+
+.nms-service-card__media img {
+    width: 100%;
+    height: 100%;
+    /* "contain" shows the whole machine, even for tall photos */
+    object-fit: contain;
+}
+
+.nms-service-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 14px 18px 18px;
+}
+
+.nms-service-card__title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.nms-service-card__title a {
+    color: var(--nms-ink);
+}
+
+.nms-service-card__subtitle {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--nms-muted);
+    margin-bottom: 16px;
+}
+
+/* "View details" link sits at the bottom of every card, even if subtitles differ in length */
+.nms-service-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.nms-service-card__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--nms-cyan);
+}
+
+.nms-service-card__more i {
+    font-size: 20px;
+    transition: transform .2s;
+}
+
+.nms-service-card__more:hover {
+    color: var(--nms-cyan-dark);
+}
+
+.nms-service-card__more:hover i {
+    transform: translateX(3px);
+}
+
+.nms-service-card__form {
+    color: var(--nms-muted);
+    font-size: 17px;
+}
+
+.nms-service-card__form:hover {
+    color: var(--nms-cyan);
+}
+
+@media (max-width: 767.98px) {
+    .nms-service-card__body {
+        padding: 12px 12px 14px;
+    }
+
+    .nms-service-card__title {
+        font-size: 16px;
+    }
+
+    .nms-service-card__subtitle {
+        font-size: 12px;
+    }
+
+    .nms-service-card__more {
+        font-size: 13px;
+        gap: 6px;
+    }
+}
